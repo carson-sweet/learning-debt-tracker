@@ -1,0 +1,160 @@
+schema_version: 1
+status: complete
+feature_name: learning-debt-tracker-v1
+feature_branch: learning-debt-tracker-v1
+github_mode: false
+phase_checkins: true
+
+current_phase: SHIP
+current_step: done
+
+discovery_artifacts:
+  personas: docs/learning-debt-tracker-user-personas-draft-v1.0-20260428.md
+  task_analysis: .sweetclaude/state/personas.yaml
+  constraints: .sweetclaude/state/discovery.yaml
+compliance_context: .sweetclaude/state/compliance-context.yaml
+d1_flags: []
+# All D1 flags cleared at D4 — all open questions resolved
+
+created_artifacts:
+  - step: D1
+    type: prd
+    path: docs/learning-debt-tracker-v1-prd-draft-v1.0-20260428.md
+    version: 2
+  - step: P1
+    type: stories
+    path: .sweetclaude/stories/learning-debt-tracker-v1-stories-v1.md
+    version: 1
+  - step: P4
+    type: gherkin
+    path: .sweetclaude/features/
+    version: 1
+  - step: DS1
+    type: architecture
+    path: docs/architecture-learning-debt-tracker-v1-v1.0-20260428.md
+    version: 2
+  - step: DS2
+    type: tech_spec
+    path: docs/tech-spec-learning-debt-tracker-v1-v1.0-20260428.md
+    version: 2
+  - step: DS3
+    type: contract_analysis
+    path: docs/contract-analysis-learning-debt-tracker-v1-v1.0-20260428.md
+    version: 2
+  - step: IP1
+    type: tests
+    path: __tests__/api/items.test.ts
+    version: 1
+  - step: IP1
+    type: tests
+    path: __tests__/api/dashboard.test.ts
+    version: 1
+  - step: IP1
+    type: tests
+    path: __tests__/components/CaptureForm.test.tsx
+    version: 1
+  - step: IP1
+    type: tests
+    path: __tests__/components/BacklogList.test.tsx
+    version: 1
+  - step: IP1
+    type: tests
+    path: __tests__/components/ItemDetail.test.tsx
+    version: 1
+  - step: IP1
+    type: tests
+    path: __tests__/components/Dashboard.test.tsx
+    version: 1
+  - step: IP1
+    type: tests
+    path: __tests__/e2e/offline.test.ts
+    version: 1
+
+issue_list:
+  - number: 1
+    title: "App scaffold — Next.js structure, layout, Prisma migration"
+    branch: local
+    status: pending
+  - number: 2
+    title: "Items list and create API — POST /api/items, GET /api/items"
+    branch: local
+    status: pending
+  - number: 3
+    title: "Item operations API — GET/:id, PATCH, DELETE"
+    branch: local
+    status: pending
+  - number: 4
+    title: "Resolve API — POST /api/items/:id/resolve"
+    branch: local
+    status: pending
+  - number: 5
+    title: "Dashboard API — GET /api/dashboard"
+    branch: local
+    status: pending
+  - number: 6
+    title: "Capture and backlog UI — CaptureForm + BacklogList"
+    branch: local
+    status: pending
+  - number: 7
+    title: "Item detail and dashboard UI — ItemDetail + Dashboard"
+    branch: local
+    status: pending
+
+caucus_outputs:
+  - step: D2
+    path: .sweetclaude/caucus/prd-review-20260428.md
+  - step: D3
+    path: .sweetclaude/caucus/prd-review-20260428-changes.md
+  - step: P2
+    path: .sweetclaude/caucus/story-review-20260428.md
+  - step: P3
+    path: .sweetclaude/caucus/story-review-20260428-changes.md
+  - step: DS4
+    path: .sweetclaude/caucus/architecture-review-20260428.md
+  - step: DS5
+    path: .sweetclaude/caucus/architecture-review-20260428-changes.md
+
+checkin_outputs:
+  - step: CK1
+    path: inline
+    findings: minor
+    escalated: false
+    note: FR-010/FR-012/FR-014 imply item detail/edit view not explicitly named in PRD. Inferrable from CRUD conventions. Will not block story writing.
+  - step: CK2
+    path: inline
+    findings: minor
+    escalated: false
+    note: US-013/US-015 Gherkin backgrounds assume In Progress precondition for resolution. PRD does not require prior In Progress status. Open→Resolved path not covered in tests.
+  - step: CK3
+    path: inline
+    findings: significant
+    escalated: true
+    note: US-016 AC-1 defines openCount as Open OR In Progress; FR-016 and architecture define openCount without qualification. Resolved — all docs now consistently define openCount as OPEN or IN_PROGRESS.
+  - step: CK3-rerun
+    path: inline
+    findings: minor
+    escalated: false
+    note: PATCH /api/items/:id contract did not specify 422 for invalid resourceLink URL format. US-012 requires http/https validation. Fixed inline — server-side URL format validation added to architecture §6 PATCH contract.
+
+interactive_gate_pending:
+  step: null
+  description: null
+
+locked_test_files:
+  - __tests__/api/items.test.ts
+  - __tests__/api/dashboard.test.ts
+  - __tests__/components/CaptureForm.test.tsx
+  - __tests__/components/BacklogList.test.tsx
+  - __tests__/components/ItemDetail.test.tsx
+  - __tests__/components/Dashboard.test.tsx
+  - __tests__/e2e/offline.test.ts
+
+context_checkpoint:
+  step: null
+  timestamp: null
+  notes: null
+
+sessions:
+  - started: 2026-04-28T00:00:00Z
+    ended: null
+    steps_completed: [B1, B2, B3, B4, D1, D2, D3, D4, CK1, P1, P2, P3, P4, CK2, DS1, DS2, DS3, DS4, DS5, DS6, DS7, CK3, IP1, IP2, IP3, IP4, IP5, IP6, IM1, IM2-ISS-001, V1, V2, V3, V4, V5]

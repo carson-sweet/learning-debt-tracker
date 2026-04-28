@@ -1,0 +1,44 @@
+schema_version: 1
+generated: autonomous
+step: DS1
+date: 2026-04-28
+
+architecture_file: docs/architecture-learning-debt-tracker-v1-v1.0-20260428.md
+adr_directory: docs/adr/
+
+adrs:
+  - id: ADR-001
+    file: docs/adr/ADR-001-monolith-architecture-20260428.md
+    decision: Single deployable monolith
+  - id: ADR-002
+    file: docs/adr/ADR-002-nextjs-app-router-20260428.md
+    decision: Next.js App Router with TypeScript
+  - id: ADR-003
+    file: docs/adr/ADR-003-sqlite-prisma-20260428.md
+    decision: SQLite via Prisma singleton
+  - id: ADR-004
+    file: docs/adr/ADR-004-server-side-database-access-20260428.md
+    decision: Route Handlers as only DB access boundary
+  - id: ADR-005
+    file: docs/adr/ADR-005-no-auth-local-only-20260428.md
+    decision: No authentication, local only
+  - id: ADR-006
+    file: docs/adr/ADR-006-status-transitions-20260428.md
+    decision: Open→Resolved allowed; Resolved is terminal
+
+primary_entities:
+  - DebtItem
+
+api_routes:
+  - POST /api/items
+  - GET /api/items
+  - GET /api/items/:id
+  - PATCH /api/items/:id
+  - POST /api/items/:id/resolve
+  - GET /api/dashboard
+
+key_constraints:
+  - Prisma never imported in client components
+  - Resolution only via dedicated /resolve endpoint
+  - Status RESOLVED is terminal — no transition out
+  - No external network calls at runtime

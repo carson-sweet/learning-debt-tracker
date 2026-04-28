@@ -33,3 +33,46 @@
 - Closest analogs: Anki (SRS, no prose closure) and GitHub TIL repos (prose, no backlog/closure workflow)
 - AI-learning-gap framing gaining traction but no dedicated product exists
 **Open questions:** none
+
+## 2026-04-28T00:00:00Z — product-prd (autonomous)
+
+**Status:** completed
+**Produced:** docs/learning-debt-tracker-v1-prd-draft-v1.0-20260428.md, .sweetclaude/state/prd.yaml
+**Key decisions:**
+- 5 epics: Capture, Backlog, Triage & Work, Resolution, Dashboard
+- 19 functional requirements, 7 NFRs
+- gdpr_floor compliance NFR included (data minimization)
+- Priority defaults to P2 at capture (reduces friction)
+**Open questions:**
+- Priority default at capture: P2 proposed — confirm at D4
+- Minimum resolution text length: any non-empty proposed — confirm at D4
+- In-progress item visual treatment in backlog
+- Dashboard "this week/month" definition: rolling vs calendar-aligned
+
+## 2026-04-28T00:00:00Z — design-tech-spec (DS2)
+
+**Status:** completed
+**Produced:** docs/tech-spec-learning-debt-tracker-v1-v1.0-20260428.md, .sweetclaude/state/tech-spec.yaml
+**Key decisions:**
+- Single monorepo, GitHub, feature branches off main
+- Local-only: no hosting provider, no staging, no CD pipeline
+- CI: GitHub Actions (lint + typecheck + vitest on every PR)
+- Tests: Vitest (API integration + component) + Playwright (e2e)
+- In-memory SQLite for test isolation (separate test-scoped Prisma client)
+- No auth (ADR-005), no monitoring (local tool), no scaling concerns
+- Shared types in types/index.ts
+**Compliance requirements applied:** gdpr_floor — data minimization
+**Open questions:** none
+
+## 2026-04-28T00:00:00Z — design-architecture (DS1)
+
+**Status:** completed
+**Produced:** docs/architecture-learning-debt-tracker-v1-v1.0-20260428.md, docs/adr/ (6 ADRs), .sweetclaude/state/architecture.yaml
+**Key decisions:**
+- Single monolith: Next.js App Router + Route Handlers + Prisma + SQLite
+- Route Handlers are the only DB access boundary (ADR-004)
+- Prisma singleton pattern in lib/prisma.ts
+- Dedicated /resolve endpoint enforces resolution gate server-side
+- Open→Resolved is a valid transition (ADR-006, resolves CK2 minor finding)
+- No authentication (ADR-005)
+**Open questions:** none

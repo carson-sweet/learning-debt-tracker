@@ -1,0 +1,27 @@
+epics:
+  - id: E1
+    name: Capture
+    frs: [FR-001, FR-002, FR-003, FR-004, FR-005]
+  - id: E2
+    name: Backlog
+    frs: [FR-006, FR-007, FR-008]
+  - id: E3
+    name: Triage & Work
+    frs: [FR-009, FR-010, FR-011, FR-012]
+  - id: E4
+    name: Resolution
+    frs: [FR-013, FR-014, FR-015]
+  - id: E5
+    name: Dashboard
+    frs: [FR-016]
+functional_requirements_count: 19
+nfrs:
+  - NFR-001
+  - NFR-002
+  - NFR-003
+  - NFR-004
+  - NFR-005
+  - NFR-006
+  - NFR-007
+current_version: 1.0
+current_file: docs/learning-debt-tracker-v1-prd-draft-v1.0-20260428.md

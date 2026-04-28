@@ -1,0 +1,25 @@
+# dependencies
+node_modules/
+
+# Next.js
+.next/
+out/
+
+# environment
+.env
+.env.local
+.env.*.local
+
+# database
+prisma/*.db
+prisma/*.db-wal
+prisma/*.db-shm
+prisma/:memory:
+prisma/prisma/
+
+# OS
+.DS_Store
+
+# build
+dist/
+build/
