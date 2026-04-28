@@ -6,7 +6,7 @@ github_mode: false
 phase_checkins: true
 
 current_phase: IMPLEMENT_PREP
-current_step: IP1
+current_step: IP2
 
 discovery_artifacts:
   personas: docs/learning-debt-tracker-user-personas-draft-v1.0-20260428.md
@@ -41,6 +41,34 @@ created_artifacts:
     type: contract_analysis
     path: docs/contract-analysis-learning-debt-tracker-v1-v1.0-20260428.md
     version: 2
+  - step: IP1
+    type: tests
+    path: __tests__/api/items.test.ts
+    version: 1
+  - step: IP1
+    type: tests
+    path: __tests__/api/dashboard.test.ts
+    version: 1
+  - step: IP1
+    type: tests
+    path: __tests__/components/CaptureForm.test.tsx
+    version: 1
+  - step: IP1
+    type: tests
+    path: __tests__/components/BacklogList.test.tsx
+    version: 1
+  - step: IP1
+    type: tests
+    path: __tests__/components/ItemDetail.test.tsx
+    version: 1
+  - step: IP1
+    type: tests
+    path: __tests__/components/Dashboard.test.tsx
+    version: 1
+  - step: IP1
+    type: tests
+    path: __tests__/e2e/offline.test.ts
+    version: 1
 
 issue_list: []
 
@@ -94,4 +122,4 @@ context_checkpoint:
 sessions:
   - started: 2026-04-28T00:00:00Z
     ended: null
-    steps_completed: [B1, B2, B3, B4, D1, D2, D3, D4, CK1, P1, P2, P3, P4, CK2, DS1, DS2, DS3, DS4, DS5, DS6, DS7, CK3]
+    steps_completed: [B1, B2, B3, B4, D1, D2, D3, D4, CK1, P1, P2, P3, P4, CK2, DS1, DS2, DS3, DS4, DS5, DS6, DS7, CK3, IP1]
