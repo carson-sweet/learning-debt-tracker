@@ -213,10 +213,11 @@ Errors: `404` if not found; `422` if item is already RESOLVED; `422` if resoluti
 Returns aggregate metrics:
 ```json
 {
-  "openCount": number,
+  "openCount": number,         // items with status OPEN or IN_PROGRESS
   "resolvedLast7Days": number,
   "resolvedLast30Days": number,
   "oldestOpenItem": { "id": string, "title": string, "createdAt": string } | null
+  // oldestOpenItem: earliest createdAt among OPEN or IN_PROGRESS items
 }
 ```
 

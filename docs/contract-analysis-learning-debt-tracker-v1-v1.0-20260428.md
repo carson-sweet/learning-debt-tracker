@@ -31,6 +31,8 @@ What this service promises to consumers. The only consumer is the browser-side R
 - `resolvedAt` is set server-side (not client-supplied)
 - Item sort order: priority ascending (P1 < P2 < P3), then `createdAt` ascending within each tier
 - Dashboard rolling windows are computed at query time (not cached) from `resolvedAt` values
+- `openCount` counts items with status `OPEN` or `IN_PROGRESS` (both represent unresolved debt)
+- `oldestOpenItem` is the item with the earliest `createdAt` among `OPEN` or `IN_PROGRESS` items
 - `title` is always non-empty and ≤ 300 characters (enforced server-side)
 - `source`, when present, is ≤ 500 characters (enforced server-side)
 

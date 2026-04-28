@@ -94,10 +94,10 @@ generated: autonomous
 ### 4.6 Dashboard
 
 **FR-016:** The system shall display a dashboard with the following four metrics:
-- Total open item count
+- Total open item count (items with status Open **or** In Progress — both represent unresolved learning debt)
 - Items resolved in the last 7 days (rolling window)
 - Items resolved in the last 30 days (rolling window)
-- Oldest open item (title and age)
+- Oldest open item (title and age — the earliest created_at among items with status Open or In Progress)
 
 ### 4.7 Data Persistence
 

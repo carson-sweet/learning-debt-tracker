@@ -6,7 +6,7 @@ github_mode: false
 phase_checkins: true
 
 current_phase: DESIGN
-current_step: CK3
+current_step: DS6
 
 discovery_artifacts:
   personas: docs/learning-debt-tracker-user-personas-draft-v1.0-20260428.md
@@ -69,6 +69,11 @@ checkin_outputs:
     findings: minor
     escalated: false
     note: US-013/US-015 Gherkin backgrounds assume In Progress precondition for resolution. PRD does not require prior In Progress status. Open→Resolved path not covered in tests.
+  - step: CK3
+    path: inline
+    findings: significant
+    escalated: true
+    note: US-016 AC-1 defines openCount as Open OR In Progress; FR-016 and architecture define openCount without qualification. Contradiction will cause a test failure at implementation. Returned to DS6 for resolution.
 
 interactive_gate_pending:
   step: null
