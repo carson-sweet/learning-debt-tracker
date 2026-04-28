@@ -6,7 +6,7 @@ github_mode: false
 phase_checkins: true
 
 current_phase: PLAN
-current_step: P2
+current_step: P4
 
 discovery_artifacts:
   personas: docs/learning-debt-tracker-user-personas-draft-v1.0-20260428.md
@@ -33,6 +33,10 @@ caucus_outputs:
     path: .sweetclaude/caucus/prd-review-20260428.md
   - step: D3
     path: .sweetclaude/caucus/prd-review-20260428-changes.md
+  - step: P2
+    path: .sweetclaude/caucus/story-review-20260428.md
+  - step: P3
+    path: .sweetclaude/caucus/story-review-20260428-changes.md
 
 checkin_outputs:
   - step: CK1
@@ -55,4 +59,4 @@ context_checkpoint:
 sessions:
   - started: 2026-04-28T00:00:00Z
     ended: null
-    steps_completed: [B1, B2, B3, B4, D1, D2, D3, D4, CK1, P1]
+    steps_completed: [B1, B2, B3, B4, D1, D2, D3, D4, CK1, P1, P2, P3]

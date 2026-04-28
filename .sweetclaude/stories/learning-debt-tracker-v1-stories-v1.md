@@ -59,7 +59,7 @@ As a user, I want to optionally add a source or context note when capturing an i
 - A source/context text field is available within the capture flow
 - The field is optional — submitting without it does not produce an error
 - The source text is saved with the item and displayed in the backlog row (FR-008)
-- The source field accepts free text up to a reasonable length (no structured format required)
+- The source field accepts free text up to 500 characters (no structured format required)
 
 ---
 
@@ -96,7 +96,9 @@ As a user, I want to see all my open debt items sorted by priority then by age, 
 - The backlog displays all debt items by default (status filter defaults to "Open")
 - Items are sorted: P1 items first, then P2, then P3
 - Within each priority tier, items are sorted oldest-first (by created_at)
-- Sort order updates immediately when an item's priority changes
+- Sort order updates synchronously on state update (without a page reload) when an item's priority changes
+- The backlog list and each item row are keyboard-navigable (focus moves between rows with arrow keys or Tab; item actions are reachable without a mouse)
+- Priority badges and status badges have accessible labels (not communicated by color alone)
 
 ---
 
@@ -107,9 +109,10 @@ As a user, I want to filter my backlog by status (Open, In Progress, Resolved), 
 **Acceptance criteria:**
 - A status filter is available on the backlog view with options: All, Open, In Progress, Resolved
 - The default view shows Open items only
-- Selecting a filter immediately updates the displayed items without a page reload
-- The active filter is visually indicated
+- Selecting a filter updates the displayed items synchronously (without a page reload)
+- The active filter is visually indicated and announced to screen readers (aria-pressed or aria-selected on the active filter control)
 - Filter state persists across page refreshes (stored in localStorage or URL param)
+- Filter controls are operable by keyboard (Tab to reach, Enter/Space to activate)
 
 ---
 
@@ -119,8 +122,8 @@ As a user, I want to see the key details of each item in the backlog row, so tha
 
 **Acceptance criteria:**
 - Each backlog row displays: title, priority badge (P1/P2/P3), status badge, age (e.g., "3 days ago"), and source/context if present
-- In-progress items are visually distinct from open items (e.g., different background color, border, or pin indicator)
-- Resolved items (when filtered in) show a visual indicator that they are closed
+- In-progress items are visually distinct from open items (e.g., different background color, border, or pin indicator); the distinction is not communicated by color alone (label or icon also present)
+- Resolved items (when filtered in) show a visual indicator that they are closed; resolved status is communicated via text label or icon, not color alone
 
 ---
 
@@ -132,9 +135,10 @@ As a user, I want to change the priority of any debt item, so that I can reorgan
 
 **Acceptance criteria:**
 - Priority can be changed from the item's detail/edit view or inline in the backlog row
-- Priority changes are saved immediately (no separate "save" button required)
-- The backlog sort order updates immediately to reflect the new priority
+- Priority changes are saved synchronously on selection (no separate "save" button required)
+- The backlog sort order updates synchronously (without a page reload) to reflect the new priority
 - All three priority values (P1, P2, P3) are selectable regardless of current priority
+- The priority selector is keyboard-operable (focusable, selectable with arrow keys or Enter)
 
 ---
 
@@ -157,7 +161,8 @@ As a user, I want to mark a debt item as "In Progress," so that I can signal to 
 
 **Acceptance criteria:**
 - A transition to "In Progress" is available from the item's detail/edit view or as an inline action in the backlog
-- In-progress items appear visually distinct in the backlog (distinct background or pinned to top of their priority group — FR-011)
+- In-progress items appear visually distinct in the backlog (distinct background or pinned to top of their priority group — FR-011); the distinction is not communicated by color alone
+- The "In Progress" action control has an accessible label (e.g., aria-label="Mark as In Progress") and is keyboard-operable
 - An item can be moved back to "Open" from "In Progress" (status is reversible before resolution)
 - The transition is recorded with a timestamp
 
@@ -172,7 +177,7 @@ As a user, I want to add a URL resource link to an item I am actively working on
 - The field is optional — an item can be In Progress without a resource link
 - The URL is displayed as a clickable link in the item detail view
 - Basic URL validation is applied (must begin with http:// or https://)
-- The resource link field is not shown or is disabled for Open or Resolved items
+- The resource link field is not shown for Open or Resolved items
 
 ---
 
@@ -185,8 +190,8 @@ As a user, I want to be required to write my own explanation before closing a de
 **Acceptance criteria:**
 - A "Resolve" action is available from the item's detail/edit view
 - The resolve action reveals (or navigates to) a resolution textarea with placeholder text: "What do you understand now that you didn't when you captured this?"
-- The resolution textarea is required — submitting with an empty field is blocked with a clear error message
-- Any non-empty text is accepted (no minimum character count)
+- The "Submit resolution" button is disabled until the resolution textarea contains at least one non-whitespace character (see US-015 for the enforcement mechanism)
+- Any non-empty, non-whitespace text is accepted (no minimum character count)
 - Submitting a non-empty resolution changes the item's status to "Resolved" and records the resolved_at timestamp
 
 ---
@@ -208,9 +213,10 @@ As a user, I want to see my self-written explanation when I view a resolved item
 As a user, I want the system to prevent me from closing an item without writing something, so that the closure ritual is enforced even when I'm tempted to skip it.
 
 **Acceptance criteria:**
-- The "Resolve" / "Mark Done" button/action is not available until the resolution textarea contains at least one non-whitespace character
-- Attempting to submit an empty or whitespace-only explanation displays an inline error: "Write what you understand before closing this item"
-- The item remains in its current status (Open or In Progress) if the resolve action is blocked
+- The "Submit resolution" button is disabled (aria-disabled="true") when the resolution textarea is empty or contains only whitespace
+- The button becomes enabled as soon as the textarea contains at least one non-whitespace character
+- The item's status does not change until a valid resolution is submitted
+- The disabled state of the button is communicated to screen readers (not communicated by visual style alone)
 
 ---
 
@@ -227,9 +233,10 @@ As a user, I want to see a summary of my learning debt at a glance, so that I ca
   2. **Resolved last 7 days** — count of items with resolved_at within the last 7 days (rolling window from current timestamp)
   3. **Resolved last 30 days** — count of items with resolved_at within the last 30 days (rolling window)
   4. **Oldest open item** — title and age of the item with the earliest created_at that is still Open or In Progress
-- Metrics update in real time (on page load; no manual refresh required)
+- Metrics reflect the current database state on page load (no manual refresh required)
 - If no open items exist, the "Oldest open item" metric displays a positive empty state ("No open items")
 - If no items were resolved in the window, the metric displays 0
+- Each metric has an accessible label readable by screen readers (metric value is not presented as a bare number without context)
 
 ---
 
