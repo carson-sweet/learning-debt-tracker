@@ -1,0 +1,18 @@
+schema_version: 1
+generated: autonomous
+step: DS2
+date: 2026-04-28
+
+repo_structure: monorepo
+source_control: github
+environments:
+  - local-dev
+  - local-test
+cicd_platform: github-actions
+hosting_provider: localhost-only
+auth_approach: none
+monitoring_tools: []
+scaling_notes: Not applicable — single user, local SQLite, no deployment
+compliance_requirements_applied:
+  - gdpr_floor: data minimization — no telemetry, no external calls
+current_file: docs/tech-spec-learning-debt-tracker-v1-v1.0-20260428.md

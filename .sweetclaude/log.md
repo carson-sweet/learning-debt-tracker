@@ -49,6 +49,21 @@
 - In-progress item visual treatment in backlog
 - Dashboard "this week/month" definition: rolling vs calendar-aligned
 
+## 2026-04-28T00:00:00Z — design-tech-spec (DS2)
+
+**Status:** completed
+**Produced:** docs/tech-spec-learning-debt-tracker-v1-v1.0-20260428.md, .sweetclaude/state/tech-spec.yaml
+**Key decisions:**
+- Single monorepo, GitHub, feature branches off main
+- Local-only: no hosting provider, no staging, no CD pipeline
+- CI: GitHub Actions (lint + typecheck + vitest on every PR)
+- Tests: Vitest (API integration + component) + Playwright (e2e)
+- In-memory SQLite for test isolation (separate test-scoped Prisma client)
+- No auth (ADR-005), no monitoring (local tool), no scaling concerns
+- Shared types in types/index.ts
+**Compliance requirements applied:** gdpr_floor — data minimization
+**Open questions:** none
+
 ## 2026-04-28T00:00:00Z — design-architecture (DS1)
 
 **Status:** completed
