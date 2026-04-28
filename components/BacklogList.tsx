@@ -8,6 +8,7 @@ interface Props {
   filter?: string
   onStatusChange: (id: string, status: string) => void
   onPriorityChange: (id: string, priority: string) => void
+  onItemClick?: (item: DebtItem) => void
 }
 
 function ageLabel(createdAt: string): string {
@@ -42,7 +43,7 @@ function statusBadgeContent(item: DebtItem): string {
   return label ?? item.status
 }
 
-export function BacklogList({ items, filter, onStatusChange, onPriorityChange }: Props) {
+export function BacklogList({ items, filter, onStatusChange, onPriorityChange, onItemClick }: Props) {
   const [activeFilter, setActiveFilter] = useState(filter ?? 'ALL')
 
   useEffect(() => {
@@ -139,7 +140,11 @@ export function BacklogList({ items, filter, onStatusChange, onPriorityChange }:
         <ul>
           {visible.map((item) => (
             <li key={item.id}>
-              <span>{item.title}</span>
+              {onItemClick ? (
+                <button type="button" onClick={() => onItemClick(item)}>{item.title}</button>
+              ) : (
+                <span>{item.title}</span>
+              )}
               <span data-testid="priority-badge">{item.priority}</span>
               <span data-testid="status-badge">{statusBadgeContent(item)}</span>
               <span>{ageLabel(item.createdAt)}</span>
