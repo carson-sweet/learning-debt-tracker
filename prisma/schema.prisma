@@ -10,8 +10,8 @@ datasource db {
 model DebtItem {
   id           String    @id @default(cuid())
   title        String
-  priority     Priority  @default(P2)
-  status       Status    @default(OPEN)
+  priority     String    @default("P2")
+  status       String    @default("OPEN")
   source       String?
   notes        String?
   resourceLink String?
@@ -19,16 +19,4 @@ model DebtItem {
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
   resolvedAt   DateTime?
-}
-
-enum Priority {
-  P1
-  P2
-  P3
-}
-
-enum Status {
-  OPEN
-  IN_PROGRESS
-  RESOLVED
 }

@@ -7,6 +7,7 @@ export default defineConfig({
   test: {
     pool: 'forks',
     environment: 'jsdom',
+    environmentOptions: { jsdom: { url: 'http://localhost:3000' } },
     setupFiles: ['./vitest.setup.ts'],
     globals: true,
     exclude: ['**/node_modules/**', '**/e2e/**', '**/__tests__/e2e/**'],
