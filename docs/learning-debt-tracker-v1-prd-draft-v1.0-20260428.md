@@ -1,7 +1,7 @@
 ---
 title: Learning Debt Tracker v1 PRD
 version: 1.0
-status: draft
+status: approved
 author: Carson Sweet
 assisted_by: Claude Code + SweetClaude (John Wick mode)
 date: 2026-04-28
@@ -79,13 +79,13 @@ generated: autonomous
 
 ### 4.4 Work
 
-**FR-011:** The system shall allow a user to mark a debt item as "In Progress."
+**FR-011:** The system shall allow a user to mark a debt item as "In Progress." In-progress items shall be visually distinct in the backlog (e.g., distinct background color or pinned to the top of their priority group).
 
 **FR-012:** The system shall allow a user to optionally add a resource link to an In Progress item.
 
 ### 4.5 Resolution
 
-**FR-013:** The system shall require a non-empty, user-authored written explanation before a debt item can be marked "Resolved."
+**FR-013:** The system shall require a non-empty, user-authored written explanation before a debt item can be marked "Resolved." The resolution textarea shall use the placeholder text: "What do you understand now that you didn't when you captured this?"
 
 **FR-014:** The system shall store the resolution explanation with the item and display it when the item is viewed after resolution.
 
@@ -95,8 +95,8 @@ generated: autonomous
 
 **FR-016:** The system shall display a dashboard with the following four metrics:
 - Total open item count
-- Items resolved this week (rolling 7 days)
-- Items resolved this month (rolling 30 days)
+- Items resolved in the last 7 days (rolling window)
+- Items resolved in the last 30 days (rolling window)
 - Oldest open item (title and age)
 
 ### 4.7 Data Persistence
@@ -177,17 +177,14 @@ generated: autonomous
 
 ## 9. Open Questions
 
-[14] The following questions were not resolved during discovery and should be addressed at the D4 review gate or during implementation:
+[14] All open questions were resolved at the D4 gate (2026-04-28):
 
-1. **Priority default at capture:** Should priority default to P2 (reducing capture friction) or should it be required at capture? FR-002 proposes P2 as default — confirm or adjust.
+1. **Priority default at capture:** Defaults to P2. User adjusts at triage if needed.
+2. **Minimum resolution length:** Any non-empty text is sufficient to close an item.
+3. **In-progress visibility in backlog:** In-progress items are visually distinct (distinct background or pinned to top of priority group) — captured in FR-011.
+4. **Dashboard time windows:** Rolling — last 7 days and last 30 days — captured in FR-016.
 
-2. **Minimum resolution length:** Is any non-empty text sufficient to close an item, or should there be a minimum character count (e.g., 20 characters) to prevent trivially gaming the system?
-
-3. **In-progress visibility in backlog:** Should in-progress items be visually distinct from open items in the backlog (e.g., different background, pinned to top), or simply filtered/labeled?
-
-4. **"This week" / "This month" definition:** Dashboard metrics — are these rolling (last 7/30 days) or calendar-aligned (current week Mon–Sun, current month)?
-
-⚠️ Flagged for review: These four questions are unresolved. Each has a proposed default in the PRD (P2 default, any non-empty text, label only, rolling window) — confirm or override at D4.
+No open questions remain.
 
 ---
 

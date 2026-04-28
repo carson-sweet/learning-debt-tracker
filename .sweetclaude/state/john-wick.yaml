@@ -1,12 +1,12 @@
 schema_version: 1
-status: waiting_for_user
+status: active
 feature_name: learning-debt-tracker-v1
 feature_branch: learning-debt-tracker-v1
 github_mode: false
 phase_checkins: true
 
 current_phase: DEFINE
-current_step: D4
+current_step: CK1
 
 discovery_artifacts:
   personas: docs/learning-debt-tracker-user-personas-draft-v1.0-20260428.md
@@ -14,12 +14,13 @@ discovery_artifacts:
   constraints: .sweetclaude/state/discovery.yaml
 compliance_context: .sweetclaude/state/compliance-context.yaml
 d1_flags: []
+# All D1 flags cleared at D4 — all open questions resolved
 
 created_artifacts:
   - step: D1
     type: prd
     path: docs/learning-debt-tracker-v1-prd-draft-v1.0-20260428.md
-    version: 1
+    version: 2
 
 issue_list: []
 
@@ -32,8 +33,8 @@ caucus_outputs:
 checkin_outputs: []
 
 interactive_gate_pending:
-  step: D4
-  description: PRD approval — review contested findings and open questions
+  step: null
+  description: null
 
 locked_test_files: []
 
@@ -45,4 +46,4 @@ context_checkpoint:
 sessions:
   - started: 2026-04-28T00:00:00Z
     ended: null
-    steps_completed: [B1, B2, B3, B4, D1, D2, D3]
+    steps_completed: [B1, B2, B3, B4, D1, D2, D3, D4]
