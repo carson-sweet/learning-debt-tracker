@@ -48,3 +48,16 @@
 - Minimum resolution text length: any non-empty proposed — confirm at D4
 - In-progress item visual treatment in backlog
 - Dashboard "this week/month" definition: rolling vs calendar-aligned
+
+## 2026-04-28T00:00:00Z — design-architecture (DS1)
+
+**Status:** completed
+**Produced:** docs/architecture-learning-debt-tracker-v1-v1.0-20260428.md, docs/adr/ (6 ADRs), .sweetclaude/state/architecture.yaml
+**Key decisions:**
+- Single monolith: Next.js App Router + Route Handlers + Prisma + SQLite
+- Route Handlers are the only DB access boundary (ADR-004)
+- Prisma singleton pattern in lib/prisma.ts
+- Dedicated /resolve endpoint enforces resolution gate server-side
+- Open→Resolved is a valid transition (ADR-006, resolves CK2 minor finding)
+- No authentication (ADR-005)
+**Open questions:** none

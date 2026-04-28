@@ -5,8 +5,8 @@ feature_branch: learning-debt-tracker-v1
 github_mode: false
 phase_checkins: true
 
-current_phase: PLAN
-current_step: DS1
+current_phase: DESIGN
+current_step: DS2
 
 discovery_artifacts:
   personas: docs/learning-debt-tracker-user-personas-draft-v1.0-20260428.md
@@ -28,6 +28,10 @@ created_artifacts:
   - step: P4
     type: gherkin
     path: .sweetclaude/features/
+    version: 1
+  - step: DS1
+    type: architecture
+    path: docs/architecture-learning-debt-tracker-v1-v1.0-20260428.md
     version: 1
 
 issue_list: []
@@ -68,4 +72,4 @@ context_checkpoint:
 sessions:
   - started: 2026-04-28T00:00:00Z
     ended: null
-    steps_completed: [B1, B2, B3, B4, D1, D2, D3, D4, CK1, P1, P2, P3, P4, CK2]
+    steps_completed: [B1, B2, B3, B4, D1, D2, D3, D4, CK1, P1, P2, P3, P4, CK2, DS1]
