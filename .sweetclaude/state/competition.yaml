@@ -1,0 +1,88 @@
+depth_run: L1
+competitors:
+  - name: Anki
+    depth_analyzed: L1
+    positioning: Free open-source flashcard program using spaced repetition
+    key_differentiators: [SM-2/FSRS algorithm, largest community deck library]
+    target_market: Students and language learners
+    pricing_model: Free (desktop), $24.99 iOS
+    distribution: Self-serve, open source
+
+  - name: RemNote
+    depth_analyzed: L1
+    positioning: All-in-one tool for thinking and learning — notes + SRS flashcards
+    key_differentiators: [Flashcards generated from notes, bi-directional linking, AI autocomplete]
+    target_market: Students and knowledge workers
+    pricing_model: Freemium with restricted free tier
+    distribution: Self-serve
+
+  - name: SuperMemo
+    depth_analyzed: L1
+    positioning: Original SRS inventor, most scientifically advanced algorithm
+    key_differentiators: [SM-18+ algorithm, incremental reading]
+    target_market: Power users, language learners
+    pricing_model: Paid, mixed pricing
+    distribution: Self-serve, Windows-first
+
+  - name: Obsidian
+    depth_analyzed: L1
+    positioning: Local-first Markdown knowledge base — your notes belong to you
+    key_differentiators: [Plain text local files, 1500+ community plugins, graph view]
+    target_market: Technical knowledge workers and developers
+    pricing_model: Free personal, paid sync/publish add-ons
+    distribution: Self-serve, open ecosystem
+
+  - name: Logseq
+    depth_analyzed: L1
+    positioning: Privacy-first open-source knowledge base, outliner-style
+    key_differentiators: [Fully open source, local storage, free]
+    target_market: Developers and knowledge workers
+    pricing_model: Free
+    distribution: Self-serve, open source
+
+  - name: Notion
+    depth_analyzed: L1
+    positioning: Connected workspace for notes, databases, wikis, and project management
+    key_differentiators: [Database flexibility, templates marketplace, AI features]
+    target_market: Teams and individuals across all knowledge work
+    pricing_model: Freemium, team tiers
+    distribution: Self-serve, PLG
+
+  - name: Roam Research
+    depth_analyzed: L1
+    positioning: Note-taking tool for networked thought
+    key_differentiators: [Originator of bidirectional-linking PKM paradigm]
+    target_market: Researchers and knowledge workers
+    pricing_model: $15/month
+    distribution: Self-serve
+
+  - name: Readwise
+    depth_analyzed: L1
+    positioning: Remember more of what you read — SRS for reading highlights
+    key_differentiators: [Surfaces highlights at scheduled intervals, Readwise Reader companion]
+    target_market: Voracious readers and knowledge workers
+    pricing_model: $7.99–$13.99/month
+    distribution: Self-serve
+
+  - name: GitHub TIL repos
+    depth_analyzed: L1
+    positioning: Community convention — short Markdown files of things learned each day
+    key_differentiators: [Zero tooling friction, version-controlled, social proof]
+    target_market: Developers
+    pricing_model: Free (GitHub convention)
+    distribution: Self-serve, community practice
+
+  - name: Todoist
+    depth_analyzed: L1
+    positioning: General-purpose task manager for work and life
+    key_differentiators: [Simplicity, natural language entry, cross-platform reliability]
+    target_market: General productivity users
+    pricing_model: Freemium
+    distribution: Self-serve, PLG
+
+features_analyzed: []
+key_gap: >
+  No product combines (1) sub-10-second capture, (2) priority-ordered backlog purpose-built
+  for deferred concepts, and (3) required self-written explanation to close an item.
+  The AI-learning-gap framing is gaining conceptual traction but no dedicated tracking
+  product exists.

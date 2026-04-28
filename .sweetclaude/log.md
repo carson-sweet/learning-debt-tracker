@@ -22,3 +22,14 @@
 **Tasks defined:** 6 (shared across both personas)
 **Skipped/shortcuts:** Task workflows 2-6 not fully detailed — accepted from discovery doc; anti-profile skipped
 **Open questions:** none
+
+## 2026-04-28T00:00:00Z — product-competition (L1)
+
+**Status:** completed
+**Depth:** L1 survey
+**Produced:** docs/learning-debt-tracker-competition-draft-v1.0-20260428.md, .sweetclaude/state/competition.yaml
+**Key decisions:**
+- No direct competitor found — the capture + backlog + prose-closure combination is unoccupied
+- Closest analogs: Anki (SRS, no prose closure) and GitHub TIL repos (prose, no backlog/closure workflow)
+- AI-learning-gap framing gaining traction but no dedicated product exists
+**Open questions:** none
