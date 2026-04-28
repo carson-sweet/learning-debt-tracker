@@ -5,8 +5,8 @@ feature_branch: learning-debt-tracker-v1
 github_mode: false
 phase_checkins: true
 
-current_phase: IMPLEMENT_PREP
-current_step: IP3
+current_phase: IMPLEMENT
+current_step: IM1
 
 discovery_artifacts:
   personas: docs/learning-debt-tracker-user-personas-draft-v1.0-20260428.md
@@ -70,7 +70,35 @@ created_artifacts:
     path: __tests__/e2e/offline.test.ts
     version: 1
 
-issue_list: []
+issue_list:
+  - number: 1
+    title: "App scaffold — Next.js structure, layout, Prisma migration"
+    branch: local
+    status: pending
+  - number: 2
+    title: "Items list and create API — POST /api/items, GET /api/items"
+    branch: local
+    status: pending
+  - number: 3
+    title: "Item operations API — GET/:id, PATCH, DELETE"
+    branch: local
+    status: pending
+  - number: 4
+    title: "Resolve API — POST /api/items/:id/resolve"
+    branch: local
+    status: pending
+  - number: 5
+    title: "Dashboard API — GET /api/dashboard"
+    branch: local
+    status: pending
+  - number: 6
+    title: "Capture and backlog UI — CaptureForm + BacklogList"
+    branch: local
+    status: pending
+  - number: 7
+    title: "Item detail and dashboard UI — ItemDetail + Dashboard"
+    branch: local
+    status: pending
 
 caucus_outputs:
   - step: D2
@@ -112,7 +140,14 @@ interactive_gate_pending:
   step: null
   description: null
 
-locked_test_files: []
+locked_test_files:
+  - __tests__/api/items.test.ts
+  - __tests__/api/dashboard.test.ts
+  - __tests__/components/CaptureForm.test.tsx
+  - __tests__/components/BacklogList.test.tsx
+  - __tests__/components/ItemDetail.test.tsx
+  - __tests__/components/Dashboard.test.tsx
+  - __tests__/e2e/offline.test.ts
 
 context_checkpoint:
   step: null
@@ -122,4 +157,4 @@ context_checkpoint:
 sessions:
   - started: 2026-04-28T00:00:00Z
     ended: null
-    steps_completed: [B1, B2, B3, B4, D1, D2, D3, D4, CK1, P1, P2, P3, P4, CK2, DS1, DS2, DS3, DS4, DS5, DS6, DS7, CK3, IP1, IP2]
+    steps_completed: [B1, B2, B3, B4, D1, D2, D3, D4, CK1, P1, P2, P3, P4, CK2, DS1, DS2, DS3, DS4, DS5, DS6, DS7, CK3, IP1, IP2, IP3, IP4, IP5, IP6]
