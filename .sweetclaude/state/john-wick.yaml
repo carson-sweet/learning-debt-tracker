@@ -5,8 +5,8 @@ feature_branch: learning-debt-tracker-v1
 github_mode: false
 phase_checkins: true
 
-current_phase: DESIGN
-current_step: DS6
+current_phase: IMPLEMENT_PREP
+current_step: IP1
 
 discovery_artifacts:
   personas: docs/learning-debt-tracker-user-personas-draft-v1.0-20260428.md
@@ -73,7 +73,12 @@ checkin_outputs:
     path: inline
     findings: significant
     escalated: true
-    note: US-016 AC-1 defines openCount as Open OR In Progress; FR-016 and architecture define openCount without qualification. Contradiction will cause a test failure at implementation. Returned to DS6 for resolution.
+    note: US-016 AC-1 defines openCount as Open OR In Progress; FR-016 and architecture define openCount without qualification. Resolved — all docs now consistently define openCount as OPEN or IN_PROGRESS.
+  - step: CK3-rerun
+    path: inline
+    findings: minor
+    escalated: false
+    note: PATCH /api/items/:id contract did not specify 422 for invalid resourceLink URL format. US-012 requires http/https validation. Fixed inline — server-side URL format validation added to architecture §6 PATCH contract.
 
 interactive_gate_pending:
   step: null
@@ -89,4 +94,4 @@ context_checkpoint:
 sessions:
   - started: 2026-04-28T00:00:00Z
     ended: null
-    steps_completed: [B1, B2, B3, B4, D1, D2, D3, D4, CK1, P1, P2, P3, P4, CK2, DS1, DS2, DS3, DS4, DS5, DS6, DS7]
+    steps_completed: [B1, B2, B3, B4, D1, D2, D3, D4, CK1, P1, P2, P3, P4, CK2, DS1, DS2, DS3, DS4, DS5, DS6, DS7, CK3]

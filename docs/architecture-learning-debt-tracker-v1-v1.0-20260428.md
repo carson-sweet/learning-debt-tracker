@@ -197,7 +197,8 @@ Errors: `404` if item not found.
 
 ### PATCH /api/items/:id
 Updates mutable fields: `title`, `priority`, `status` (OPEN↔IN_PROGRESS only), `source`, `notes`, `resourceLink`.
-Errors: `404` if not found; `422` if attempting to set `status: RESOLVED` directly; `422` if attempting any transition out of `RESOLVED`; `422` if title exceeds 300 chars; `422` if source exceeds 500 chars.
+`resourceLink`, when provided, must begin with `http://` or `https://` — enforced server-side.
+Errors: `404` if not found; `422` if attempting to set `status: RESOLVED` directly; `422` if attempting any transition out of `RESOLVED`; `422` if title exceeds 300 chars; `422` if source exceeds 500 chars; `422` if resourceLink does not begin with `http://` or `https://`.
 
 ### POST /api/items/:id/resolve
 Resolves an item.
