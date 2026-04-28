@@ -1,0 +1,90 @@
+format: generic
+scope: all
+slc_promise: null
+stories:
+  - id: US-001
+    title: Capture a debt item with title only
+    persona_id: all
+    epic_id: E1
+    format: generic
+  - id: US-002
+    title: Set priority at capture
+    persona_id: all
+    epic_id: E1
+    format: generic
+  - id: US-003
+    title: Add source context at capture
+    persona_id: all
+    epic_id: E1
+    format: generic
+  - id: US-004
+    title: Complete capture keyboard-first
+    persona_id: all
+    epic_id: E1
+    format: generic
+  - id: US-005
+    title: Receive capture confirmation
+    persona_id: all
+    epic_id: E1
+    format: generic
+  - id: US-006
+    title: View backlog sorted by priority and age
+    persona_id: all
+    epic_id: E2
+    format: generic
+  - id: US-007
+    title: Filter backlog by status
+    persona_id: all
+    epic_id: E2
+    format: generic
+  - id: US-008
+    title: See item details in the backlog
+    persona_id: all
+    epic_id: E2
+    format: generic
+  - id: US-009
+    title: Change item priority
+    persona_id: all
+    epic_id: E3
+    format: generic
+  - id: US-010
+    title: Add or edit notes on an item
+    persona_id: all
+    epic_id: E3
+    format: generic
+  - id: US-011
+    title: Mark an item as in-progress
+    persona_id: all
+    epic_id: E3
+    format: generic
+  - id: US-012
+    title: Add a resource link to an in-progress item
+    persona_id: all
+    epic_id: E3
+    format: generic
+  - id: US-013
+    title: Write a self-explanation to resolve an item
+    persona_id: all
+    epic_id: E4
+    format: generic
+  - id: US-014
+    title: View a resolution explanation after closing an item
+    persona_id: all
+    epic_id: E4
+    format: generic
+  - id: US-015
+    title: Cannot resolve without an explanation
+    persona_id: all
+    epic_id: E4
+    format: generic
+  - id: US-016
+    title: View debt summary on the dashboard
+    persona_id: all
+    epic_id: E5
+    format: generic
+  - id: US-NFR-001
+    title: App runs fully locally with no network calls
+    persona_id: all
+    epic_id: null
+    format: generic
+current_file: .sweetclaude/stories/learning-debt-tracker-v1-stories-v1.md
