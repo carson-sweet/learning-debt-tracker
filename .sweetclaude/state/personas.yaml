@@ -1,0 +1,150 @@
+personas:
+  - id: persona-1
+    name: Alex (The LLM-assisted learner)
+    role: Developer, student, or knowledge worker who uses AI tools daily
+    trigger: Gets unblocked by AI without understanding why — either at the moment of copy-pasting a fix, or later when the weight of accumulated gaps becomes visible
+    deal_breakers:
+      - Too much setup before first use
+      - Capture takes more than 10 seconds
+      - Too many required fields
+    tasks:
+      - id: task-1
+        description: Capture a learning debt item
+        workflow_steps:
+          - Open the app or switch to the tab
+          - Type a short title (the concept or topic they just got help with)
+          - Optionally add source or context (URL, note)
+          - Submit
+        inputs_needed: A title. Everything else optional.
+        success_criteria:
+          - Item captured in under 10 seconds
+          - At most 2 fields required to complete (title required, rest optional)
+          - Submittable without leaving current context (keyboard-first, minimal clicks)
+        failure_modes:
+          - Form requires too many fields — user skips it
+          - App too slow to load — user gives up
+          - No save confirmation — user loses trust or double-submits
+        research_expanded: false
+      - id: task-2
+        description: View backlog
+        workflow_steps: []
+        inputs_needed: none
+        success_criteria:
+          - Items sorted by priority and age
+          - Filterable by status
+        failure_modes: []
+        research_expanded: false
+      - id: task-3
+        description: Triage an item
+        workflow_steps: []
+        inputs_needed: none
+        success_criteria:
+          - Can change priority
+          - Can add notes
+        failure_modes: []
+        research_expanded: false
+      - id: task-4
+        description: Work on an item
+        workflow_steps: []
+        inputs_needed: none
+        success_criteria:
+          - Can mark item as in-progress
+          - Can optionally add a resource link
+        failure_modes: []
+        research_expanded: false
+      - id: task-5
+        description: Resolve an item
+        workflow_steps: []
+        inputs_needed: A self-written explanation of what the user now understands
+        success_criteria:
+          - Cannot close item without writing own explanation
+          - Explanation is free-form text authored by the user (no AI generation)
+        failure_modes:
+          - User writes a token explanation to game the system — mitigated by making the field obviously the point, not a hurdle
+        research_expanded: false
+      - id: task-6
+        description: Check the dashboard
+        workflow_steps: []
+        inputs_needed: none
+        success_criteria:
+          - Shows open debt count
+          - Shows items closed this week and this month
+          - Shows oldest open item
+        failure_modes: []
+        research_expanded: false
+
+  - id: persona-2
+    name: The voracious reader
+    role: Reads widely — articles, books, courses, documentation — and regularly encounters unfamiliar concepts
+    trigger: Encounters an unfamiliar concept mid-read; either interrupts flow to look it up or forgets it entirely
+    deal_breakers:
+      - Too much setup before first use
+      - Capture takes more than 10 seconds
+      - Too many required fields
+    tasks:
+      - id: task-1
+        description: Capture a learning debt item
+        workflow_steps:
+          - Open the app or switch to the tab
+          - Type a short title (the concept or topic they just got help with)
+          - Optionally add source or context (URL, note)
+          - Submit
+        inputs_needed: A title. Everything else optional.
+        success_criteria:
+          - Item captured in under 10 seconds
+          - At most 2 fields required to complete (title required, rest optional)
+          - Submittable without leaving current context (keyboard-first, minimal clicks)
+        failure_modes:
+          - Form requires too many fields — user skips it
+          - App too slow to load — user gives up
+          - No save confirmation — user loses trust or double-submits
+        research_expanded: false
+      - id: task-2
+        description: View backlog
+        workflow_steps: []
+        inputs_needed: none
+        success_criteria:
+          - Items sorted by priority and age
+          - Filterable by status
+        failure_modes: []
+        research_expanded: false
+      - id: task-3
+        description: Triage an item
+        workflow_steps: []
+        inputs_needed: none
+        success_criteria:
+          - Can change priority
+          - Can add notes
+        failure_modes: []
+        research_expanded: false
+      - id: task-4
+        description: Work on an item
+        workflow_steps: []
+        inputs_needed: none
+        success_criteria:
+          - Can mark item as in-progress
+          - Can optionally add a resource link
+        failure_modes: []
+        research_expanded: false
+      - id: task-5
+        description: Resolve an item
+        workflow_steps: []
+        inputs_needed: A self-written explanation of what the user now understands
+        success_criteria:
+          - Cannot close item without writing own explanation
+          - Explanation is free-form text authored by the user (no AI generation)
+        failure_modes:
+          - User writes a token explanation to game the system
+        research_expanded: false
+      - id: task-6
+        description: Check the dashboard
+        workflow_steps: []
+        inputs_needed: none
+        success_criteria:
+          - Shows open debt count
+          - Shows items closed this week and this month
+          - Shows oldest open item
+        failure_modes: []
+        research_expanded: false
+
+anti_profile: null
