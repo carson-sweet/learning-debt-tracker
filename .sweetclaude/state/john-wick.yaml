@@ -1,0 +1,40 @@
+schema_version: 1
+status: active
+feature_name: learning-debt-tracker-v1
+feature_branch: learning-debt-tracker-v1
+github_mode: false
+phase_checkins: true
+
+current_phase: BOOTSTRAP
+current_step: B4
+
+discovery_artifacts:
+  personas: docs/learning-debt-tracker-user-personas-draft-v1.0-20260428.md
+  task_analysis: .sweetclaude/state/personas.yaml
+  constraints: .sweetclaude/state/discovery.yaml
+compliance_context: .sweetclaude/state/compliance-context.yaml
+d1_flags: []
+
+created_artifacts: []
+
+issue_list: []
+
+caucus_outputs: []
+
+checkin_outputs: []
+
+interactive_gate_pending:
+  step: null
+  description: null
+
+locked_test_files: []
+
+context_checkpoint:
+  step: null
+  timestamp: null
+  notes: null
+
+sessions:
+  - started: 2026-04-28T00:00:00Z
+    ended: null
+    steps_completed: [B1, B2, B3]
