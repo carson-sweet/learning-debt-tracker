@@ -1,5 +1,5 @@
 schema_version: 1
-status: active
+status: waiting_for_user
 feature_name: learning-debt-tracker-v1
 feature_branch: learning-debt-tracker-v1
 github_mode: false
@@ -137,8 +137,8 @@ checkin_outputs:
     note: PATCH /api/items/:id contract did not specify 422 for invalid resourceLink URL format. US-012 requires http/https validation. Fixed inline — server-side URL format validation added to architecture §6 PATCH contract.
 
 interactive_gate_pending:
-  step: null
-  description: null
+  step: IM1
+  description: Pre-implementation gate — review issue list and approve implementation start
 
 locked_test_files:
   - __tests__/api/items.test.ts
