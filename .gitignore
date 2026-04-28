@@ -11,9 +11,11 @@ out/
 .env.*.local
 
 # database
-prisma/dev.db
-prisma/dev.db-wal
-prisma/dev.db-shm
+prisma/*.db
+prisma/*.db-wal
+prisma/*.db-shm
+prisma/:memory:
+prisma/prisma/
 
 # OS
 .DS_Store
