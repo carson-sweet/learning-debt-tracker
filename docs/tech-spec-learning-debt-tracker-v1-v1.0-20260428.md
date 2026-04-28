@@ -36,7 +36,7 @@ This app runs locally only. There is no staging or production environment.
 ```bash
 git clone <repo>
 cd learning-debt-tracker
-npm install
+npm install              # triggers postinstall: prisma generate automatically
 npx prisma migrate dev --name init
 npm run dev
 ```
@@ -71,6 +71,17 @@ This file is committed as `.env.example` and gitignored as `.env`. The default v
 | Prettier | 3+ | Code formatting (optional, project preference) |
 | Vitest | 1+ | Unit and integration test runner |
 | Playwright | 1.40+ | End-to-end tests for acceptance criteria |
+
+---
+
+### Troubleshooting
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| `database is locked` error | Stale WAL sidecar files from a crashed process | Delete `prisma/dev.db-wal` and `prisma/dev.db-shm`, then restart `npm run dev` |
+| `table does not exist` error on first run | Prisma migrations not applied | Run `npx prisma migrate dev` |
+| TypeScript errors on Prisma types (`Cannot find module '.prisma/client'`) | Prisma client not generated | Run `npx prisma generate` |
+| Tests fail with `table does not exist` in CI | `prisma migrate deploy` not running before tests | Check `vitest.setup.ts` — `beforeAll` must call `prisma migrate deploy` with `DATABASE_URL` set |
 
 ---
 
@@ -132,10 +143,13 @@ jobs:
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "postinstall": "prisma generate"
   }
 }
 ```
+
+Note: `postinstall` runs `prisma generate` (not `migrate dev`). It generates the Prisma client TypeScript types from the schema. Migration is a separate manual step — running it automatically on install would be destructive on a clean environment.
 
 ### No CD pipeline
 
@@ -196,6 +210,20 @@ No login screen, no session management, no user table. All requests to `localhos
 ### Database isolation for tests
 
 Tests that touch the database use a test-scoped Prisma client pointing to `:memory:` SQLite. The test setup file (`vitest.setup.ts`) creates a fresh schema before each test suite and tears it down after.
+
+**Critical:** `vitest.config.ts` must set `pool: 'forks'`. The default threads pool shares memory between workers — `file::memory:?cache=shared` isolation is undefined in that mode and will cause race conditions in CI. Forks use separate processes, giving each worker a truly isolated in-memory database.
+
+```typescript
+// vitest.config.ts
+import { defineConfig } from 'vitest/config'
+
+export default defineConfig({
+  test: {
+    pool: 'forks',
+    setupFiles: ['./vitest.setup.ts'],
+  },
+})
+```
 
 ```typescript
 // vitest.setup.ts

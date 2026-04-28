@@ -31,6 +31,13 @@ What this service promises to consumers. The only consumer is the browser-side R
 - `resolvedAt` is set server-side (not client-supplied)
 - Item sort order: priority ascending (P1 < P2 < P3), then `createdAt` ascending within each tier
 - Dashboard rolling windows are computed at query time (not cached) from `resolvedAt` values
+- `title` is always non-empty and ≤ 300 characters (enforced server-side)
+- `source`, when present, is ≤ 500 characters (enforced server-side)
+
+**Error code contract:**
+- `400` — malformed request body
+- `404` — item ID not found
+- `422` — validation failure (empty title, title >300 chars, source >500 chars, invalid status transition, empty resolution text)
 
 ---
 

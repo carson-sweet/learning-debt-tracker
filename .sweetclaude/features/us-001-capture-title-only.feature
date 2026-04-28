@@ -40,3 +40,9 @@ Feature: Capture a debt item with title only
     When I type "   " into the capture input
     And I attempt to submit the capture form
     Then no new item is created
+
+  Scenario: Cannot submit a title exceeding 300 characters
+    When I type a title of 301 characters into the capture input
+    And I attempt to submit the capture form
+    Then no new item is created
+    And I see an error indicating the title is too long

@@ -44,7 +44,7 @@ No external systems. No network egress. The browser, the server, and the databas
 
 ### 3.1 Next.js App Router (Page Layer)
 
-All pages live under `app/`. Pages are Server Components by default and use Prisma directly for read-only initial renders (they run on the server). Client Components are opted-in with `"use client"` and handle all interactive behavior.
+All pages live under `app/`. Pages are Server Components by default and may use Prisma directly for **read-only** initial renders — they run on the server and never reach the browser. Client Components are opted-in with `"use client"` and handle all interactive behavior.
 
 | Route | Type | Purpose |
 |---|---|---|
@@ -56,7 +56,7 @@ Page-level Server Component reads happen directly via Prisma for the first rende
 
 ### 3.2 Route Handler Layer (`app/api/`)
 
-Route Handlers are the only server-side entry point for mutations. Client components call these via `fetch()`. All business logic (validation, status transitions, resolution enforcement) lives here.
+Route Handlers are the only server-side entry point for **writes** and for any reads triggered by **client-side interactions**. Client components call these via `fetch()`. All business logic (validation, status transitions, resolution enforcement) lives here.
 
 | Route | Methods | Purpose |
 |---|---|---|
@@ -80,7 +80,15 @@ Client Components live within the page tree and are used for all interactive UI:
 | `components/ResolutionForm` | Explanation textarea + submit; button disabled until non-empty text |
 | `components/DashboardMetrics` | Four metric tiles (client-renderable from SSR data) |
 
-### 3.4 Prisma / SQLite Layer
+### 3.4 Server Component vs. Route Handler — Intentional Asymmetry
+
+Server Components (§3.1) read Prisma directly. Route Handlers (§3.2) are required for all writes and all client-triggered reads. This asymmetry is intentional, not an oversight:
+
+- Server Components run exclusively on the server during SSR. Prisma reads there are safe and avoid a client-side fetch roundtrip for the initial paint.
+- Route Handlers provide a stable, independently-testable HTTP contract. All mutations go through them so they can be tested in isolation without mounting the full React tree.
+- Prisma is never imported in client components (files with `"use client"`). TypeScript import discipline enforces this.
+
+### 3.5 Prisma / SQLite Layer
 
 Prisma is instantiated as a singleton in `lib/prisma.ts` to avoid connection exhaustion in Next.js development mode (hot reload creates new module instances).
 
@@ -93,7 +101,7 @@ export const prisma = globalForPrisma.prisma ?? new PrismaClient()
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
 ```
 
-The database file lives at `prisma/dev.db`. Migrations are tracked in `prisma/migrations/`.
+The database file lives at `prisma/dev.db`. Migrations are tracked in `prisma/migrations/`. SQLite WAL mode produces sidecar files `dev.db-wal` and `dev.db-shm` — all three must be in `.gitignore`.
 
 ---
 
@@ -159,18 +167,24 @@ The PATCH handler at `app/api/items/[id]/route.ts` enforces:
 
 All routes return `application/json`. Error responses use standard HTTP status codes with a `{ error: string }` body.
 
+**Standard error codes used across all routes:**
+- `400` — malformed request body (unparseable JSON, wrong content-type)
+- `404` — item ID not found
+- `422` — validation failure (constraint violated but body is well-formed)
+
 ### POST /api/items
 Creates a new debt item.
 
 Request body:
 ```json
 {
-  "title": "string (required, non-empty)",
+  "title": "string (required, non-empty, max 300 chars)",
   "priority": "P1 | P2 | P3 (optional, default P2)",
   "source": "string (optional, max 500 chars)"
 }
 ```
 Response: `201 Created` with the created `DebtItem`.
+Errors: `422` if title is empty or exceeds 300 chars; `422` if source exceeds 500 chars.
 
 ### GET /api/items
 Returns all items. Supports optional `?status=OPEN|IN_PROGRESS|RESOLVED` query param.
@@ -179,11 +193,11 @@ Response: `200 OK` with array of `DebtItem`, sorted by priority then `createdAt`
 
 ### GET /api/items/:id
 Returns a single item by ID.
+Errors: `404` if item not found.
 
 ### PATCH /api/items/:id
 Updates mutable fields: `title`, `priority`, `status` (OPEN↔IN_PROGRESS only), `source`, `notes`, `resourceLink`.
-
-Rejects: any attempt to set `status: RESOLVED` via PATCH.
+Errors: `404` if not found; `422` if attempting to set `status: RESOLVED` directly; `422` if attempting any transition out of `RESOLVED`; `422` if title exceeds 300 chars; `422` if source exceeds 500 chars.
 
 ### POST /api/items/:id/resolve
 Resolves an item.
@@ -193,8 +207,7 @@ Request body:
 { "resolution": "string (required, non-empty after trim)" }
 ```
 Sets `status: RESOLVED`, `resolvedAt: now()`, `resolution: body.resolution`.
-
-Rejects: item already resolved; empty/whitespace-only resolution text.
+Errors: `404` if not found; `422` if item is already RESOLVED; `422` if resolution is empty or whitespace-only.
 
 ### GET /api/dashboard
 Returns aggregate metrics:
@@ -275,7 +288,22 @@ Full ADR text in `docs/adr/`.
 
 ---
 
-## 10. Non-Functional Traceability
+## 10. Known Accepted Risks
+
+The following are intentional design choices for a local single-user tool, not oversights. They would need revisiting if the app were ever served remotely.
+
+| Risk | Accepted because | Mitigation if context changes |
+|---|---|---|
+| No CORS headers | Same-origin by construction (browser and server both on localhost:3000) | Add `cors` middleware if serving remotely |
+| No authentication | OS user account is the access boundary; single user | ADR-005 — revisit if exposed via ngrok or similar |
+| No rate limiting | No external attacker surface; single user | Add middleware if exposed remotely |
+| No input sanitization beyond Prisma | Prisma uses parameterized queries (no SQL injection risk); React escapes output (no XSS risk); no `dangerouslySetInnerHTML` usage permitted | Audit if raw SQL or HTML rendering is ever introduced |
+| No TLS | localhost only — TLS provides no security benefit on loopback | Add reverse proxy with TLS if serving remotely |
+| SQLite single-writer | Single user by design — no concurrent write scenario | Migrate to Postgres with connection pooling if multi-user |
+
+---
+
+## 11. Non-Functional Traceability
 
 | NFR | Architectural mechanism |
 |---|---|
