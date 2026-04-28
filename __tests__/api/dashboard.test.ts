@@ -5,6 +5,8 @@
 
 import { describe, it, expect, beforeEach } from 'vitest'
 import { GET as dashboard } from '@/app/api/dashboard/route'
+import { POST } from '@/app/api/items/route'
+import { POST as resolve } from '@/app/api/items/[id]/resolve/route'
 import { prisma } from '@/lib/prisma'
 
 beforeEach(async () => {
@@ -235,5 +237,37 @@ describe('US-016: View debt summary on the dashboard', () => {
     expect(body.oldestOpenItem.id).toBeDefined()
     expect(body.oldestOpenItem.title).toBe('Understand closures')
     expect(body.oldestOpenItem.createdAt).toBeDefined()
+  })
+
+  it('openCount increases after a new item is captured', async () => {
+    const before = await (await dashboard(new Request('http://localhost/api/dashboard'))).json()
+
+    await POST(new Request('http://localhost/api/items', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title: 'Understand prototype chain' }),
+    }))
+
+    const after = await (await dashboard(new Request('http://localhost/api/dashboard'))).json()
+    expect(after.openCount).toBe(before.openCount + 1)
+  })
+
+  it('openCount decreases after an item is resolved', async () => {
+    const item = await prisma.debtItem.create({
+      data: { title: 'Understand prototype chain', status: 'IN_PROGRESS', priority: 'P2' },
+    })
+    const before = await (await dashboard(new Request('http://localhost/api/dashboard'))).json()
+
+    await resolve(
+      new Request(`http://localhost/api/items/${item.id}/resolve`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ resolution: 'Each object has an internal __proto__ link up the chain' }),
+      }),
+      { params: { id: item.id } }
+    )
+
+    const after = await (await dashboard(new Request('http://localhost/api/dashboard'))).json()
+    expect(after.openCount).toBe(before.openCount - 1)
   })
 })

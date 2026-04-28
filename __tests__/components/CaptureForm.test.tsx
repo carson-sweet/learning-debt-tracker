@@ -341,4 +341,92 @@ describe('US-005: CaptureForm — error handling', () => {
       expect(sourceField).toHaveValue('Came up in a podcast episode')
     })
   })
+
+  it('preserves the selected priority after a save failure', async () => {
+    const user = userEvent.setup()
+    vi.spyOn(global, 'fetch').mockResolvedValueOnce(
+      new Response(JSON.stringify({ error: 'Database error' }), { status: 500 })
+    )
+
+    render(<CaptureForm onSuccess={() => {}} />)
+    await user.type(screen.getByRole('textbox', { name: /title|capture/i }), 'Understand event sourcing')
+    const p3Option = screen.getByRole('radio', { name: /P3/i })
+    await user.click(p3Option)
+    await user.keyboard('{Enter}')
+
+    await waitFor(() => {
+      expect(screen.getByRole('alert') || screen.getByText(/error|failed|could not/i)).toBeInTheDocument()
+    })
+    expect(screen.getByRole('radio', { name: /P3/i })).toBeChecked()
+  })
+})
+
+// ---------------------------------------------------------------------------
+// Loading state and double-submission prevention
+// ---------------------------------------------------------------------------
+
+describe('CaptureForm — loading state and double-submission prevention', () => {
+  it('disables the submit button while a request is in flight', async () => {
+    const user = userEvent.setup()
+    let resolveRequest!: (value: Response) => void
+    vi.spyOn(global, 'fetch').mockImplementationOnce(
+      () => new Promise<Response>((res) => { resolveRequest = res })
+    )
+
+    render(<CaptureForm onSuccess={() => {}} />)
+    await user.type(screen.getByRole('textbox', { name: /title|capture/i }), 'Understand tail calls')
+    await user.keyboard('{Enter}')
+
+    const submitButton = screen.getByRole('button', { name: /add|save|submit|capture/i })
+    expect(submitButton).toBeDisabled()
+
+    resolveRequest(
+      new Response(
+        JSON.stringify({ id: '1', title: 'Understand tail calls', priority: 'P2', status: 'OPEN', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() }),
+        { status: 201 }
+      )
+    )
+  })
+
+  it('does not make a second API call when submitted again before the first resolves', async () => {
+    const user = userEvent.setup()
+    let resolveRequest!: (value: Response) => void
+    const fetchSpy = vi.spyOn(global, 'fetch').mockImplementationOnce(
+      () => new Promise<Response>((res) => { resolveRequest = res })
+    )
+
+    render(<CaptureForm onSuccess={() => {}} />)
+    const titleInput = screen.getByRole('textbox', { name: /title|capture/i })
+    await user.type(titleInput, 'Understand tail calls')
+    await user.keyboard('{Enter}')
+    await user.keyboard('{Enter}')
+
+    expect(fetchSpy).toHaveBeenCalledTimes(1)
+
+    resolveRequest(
+      new Response(
+        JSON.stringify({ id: '1', title: 'Understand tail calls', priority: 'P2', status: 'OPEN', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() }),
+        { status: 201 }
+      )
+    )
+  })
+
+  it('calls onSuccess after a successful submission', async () => {
+    const user = userEvent.setup()
+    const onSuccess = vi.fn()
+    vi.spyOn(global, 'fetch').mockResolvedValueOnce(
+      new Response(
+        JSON.stringify({ id: '1', title: 'Understand tail calls', priority: 'P2', status: 'OPEN', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() }),
+        { status: 201 }
+      )
+    )
+
+    render(<CaptureForm onSuccess={onSuccess} />)
+    await user.type(screen.getByRole('textbox', { name: /title|capture/i }), 'Understand tail calls')
+    await user.keyboard('{Enter}')
+
+    await waitFor(() => {
+      expect(onSuccess).toHaveBeenCalledOnce()
+    })
+  })
 })

@@ -1,6 +1,6 @@
 /**
  * API integration tests for /api/items
- * Covers: US-001, US-002, US-003, US-006, US-007, US-009, US-010, US-011
+ * Covers: US-001, US-002, US-003, US-006, US-007, US-009, US-010, US-011, US-012, US-013, US-014
  */
 
 import { describe, it, expect, beforeEach } from 'vitest'
@@ -64,48 +64,48 @@ describe('US-001: Capture a debt item with title only', () => {
     expect(new Date(body.createdAt).getTime()).not.toBeNaN()
   })
 
-  it('returns 400 when title is empty string', async () => {
+  it('returns 422 when title is empty string', async () => {
     const req = new Request('http://localhost/api/items', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ title: '' }),
     })
     const res = await POST(req)
-    expect(res.status).toBe(400)
+    expect(res.status).toBe(422)
     const body = await res.json()
     expect(body.error).toBeDefined()
   })
 
-  it('returns 400 when title is whitespace-only', async () => {
+  it('returns 422 when title is whitespace-only', async () => {
     const req = new Request('http://localhost/api/items', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ title: '   ' }),
     })
     const res = await POST(req)
-    expect(res.status).toBe(400)
+    expect(res.status).toBe(422)
     const body = await res.json()
     expect(body.error).toBeDefined()
   })
 
-  it('returns 400 when title is missing from the body', async () => {
+  it('returns 422 when title is missing from the body', async () => {
     const req = new Request('http://localhost/api/items', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({}),
     })
     const res = await POST(req)
-    expect(res.status).toBe(400)
+    expect(res.status).toBe(422)
   })
 
-  it('returns 400 when title exceeds 300 characters', async () => {
+  it('returns 422 when title exceeds 300 characters', async () => {
     const req = new Request('http://localhost/api/items', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ title: 'a'.repeat(301) }),
     })
     const res = await POST(req)
-    expect(res.status).toBe(400)
+    expect(res.status).toBe(422)
     const body = await res.json()
     expect(body.error).toMatch(/title|long|character/i)
   })
@@ -233,7 +233,7 @@ describe('US-003: Add source context at capture', () => {
     expect(res.status).toBe(201)
   })
 
-  it('returns 400 when source exceeds 500 characters', async () => {
+  it('returns 422 when source exceeds 500 characters', async () => {
     const req = new Request('http://localhost/api/items', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -243,7 +243,7 @@ describe('US-003: Add source context at capture', () => {
       }),
     })
     const res = await POST(req)
-    expect(res.status).toBe(400)
+    expect(res.status).toBe(422)
   })
 })
 
@@ -317,6 +317,21 @@ describe('US-006: View backlog sorted by priority and age', () => {
     const udpIndex = items.findIndex((i: { title: string }) => i.title === 'Understand UDP')
     expect(tcpIndex).toBeLessThan(udpIndex)
   })
+
+  it('GET /api/items default filter explicitly excludes IN_PROGRESS items', async () => {
+    await prisma.debtItem.createMany({
+      data: [
+        { title: 'Open item', status: 'OPEN', priority: 'P2' },
+        { title: 'In Progress item', status: 'IN_PROGRESS', priority: 'P2' },
+      ],
+    })
+
+    const req = new Request('http://localhost/api/items')
+    const res = await GET(req)
+    const items = await res.json()
+    const statuses = items.map((i: { status: string }) => i.status)
+    expect(statuses).not.toContain('IN_PROGRESS')
+  })
 })
 
 // ---------------------------------------------------------------------------
@@ -363,6 +378,12 @@ describe('US-007: Filter backlog by status', () => {
     expect(statuses.has('OPEN')).toBe(true)
     expect(statuses.has('IN_PROGRESS')).toBe(true)
     expect(statuses.has('RESOLVED')).toBe(true)
+  })
+
+  it('GET /api/items?status=BOGUS returns 400 for an unrecognized status value', async () => {
+    const req = new Request('http://localhost/api/items?status=BOGUS')
+    const res = await GET(req)
+    expect(res.status).toBe(400)
   })
 })
 
@@ -548,7 +569,47 @@ describe('US-011: Mark an item as in-progress', () => {
       body: JSON.stringify({ status: 'RESOLVED' }),
     })
     const res = await PATCH(req, { params: { id: item.id } })
-    expect(res.status).toBe(400)
+    expect(res.status).toBe(422)
+  })
+
+  it('returns 422 when attempting to PATCH status to OPEN from RESOLVED', async () => {
+    const item = await prisma.debtItem.create({
+      data: {
+        title: 'Understand WebSockets',
+        priority: 'P2',
+        status: 'RESOLVED',
+        resolution: 'WebSockets provide full-duplex communication over a single TCP connection',
+        resolvedAt: new Date(),
+      },
+    })
+
+    const req = new Request(`http://localhost/api/items/${item.id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status: 'OPEN' }),
+    })
+    const res = await PATCH(req, { params: { id: item.id } })
+    expect(res.status).toBe(422)
+  })
+
+  it('returns 422 when attempting to PATCH status to IN_PROGRESS from RESOLVED', async () => {
+    const item = await prisma.debtItem.create({
+      data: {
+        title: 'Understand WebSockets',
+        priority: 'P2',
+        status: 'RESOLVED',
+        resolution: 'WebSockets provide full-duplex communication over a single TCP connection',
+        resolvedAt: new Date(),
+      },
+    })
+
+    const req = new Request(`http://localhost/api/items/${item.id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status: 'IN_PROGRESS' }),
+    })
+    const res = await PATCH(req, { params: { id: item.id } })
+    expect(res.status).toBe(422)
   })
 })
 
@@ -617,7 +678,7 @@ describe('US-012: Add a resource link to an in-progress item', () => {
     expect(res.status).toBe(200)
   })
 
-  it('returns 400 for a URL without protocol (bare domain)', async () => {
+  it('returns 422 for a URL without protocol (bare domain)', async () => {
     const item = await prisma.debtItem.create({
       data: { title: 'Understand service workers', priority: 'P2', status: 'IN_PROGRESS' },
     })
@@ -628,10 +689,10 @@ describe('US-012: Add a resource link to an in-progress item', () => {
       body: JSON.stringify({ resourceLink: 'example.com' }),
     })
     const res = await PATCH(req, { params: { id: item.id } })
-    expect(res.status).toBe(400)
+    expect(res.status).toBe(422)
   })
 
-  it('returns 400 for an ftp:// URL', async () => {
+  it('returns 422 for an ftp:// URL', async () => {
     const item = await prisma.debtItem.create({
       data: { title: 'Understand service workers', priority: 'P2', status: 'IN_PROGRESS' },
     })
@@ -642,10 +703,10 @@ describe('US-012: Add a resource link to an in-progress item', () => {
       body: JSON.stringify({ resourceLink: 'ftp://example.com' }),
     })
     const res = await PATCH(req, { params: { id: item.id } })
-    expect(res.status).toBe(400)
+    expect(res.status).toBe(422)
   })
 
-  it('returns 400 for a plain string that is not a URL', async () => {
+  it('returns 422 for a plain string that is not a URL', async () => {
     const item = await prisma.debtItem.create({
       data: { title: 'Understand service workers', priority: 'P2', status: 'IN_PROGRESS' },
     })
@@ -656,7 +717,7 @@ describe('US-012: Add a resource link to an in-progress item', () => {
       body: JSON.stringify({ resourceLink: 'not a url at all' }),
     })
     const res = await PATCH(req, { params: { id: item.id } })
-    expect(res.status).toBe(400)
+    expect(res.status).toBe(422)
   })
 })
 
@@ -752,7 +813,7 @@ describe('US-013: Write a self-explanation to resolve an item', () => {
     expect(body.status).toBe('RESOLVED')
   })
 
-  it('returns 400 when resolution is empty string', async () => {
+  it('returns 422 when resolution is empty string', async () => {
     const item = await prisma.debtItem.create({
       data: { title: 'Understand event loop', priority: 'P2', status: 'IN_PROGRESS' },
     })
@@ -763,10 +824,10 @@ describe('US-013: Write a self-explanation to resolve an item', () => {
       body: JSON.stringify({ resolution: '' }),
     })
     const res = await resolve(req, { params: { id: item.id } })
-    expect(res.status).toBe(400)
+    expect(res.status).toBe(422)
   })
 
-  it('returns 400 when resolution is whitespace-only', async () => {
+  it('returns 422 when resolution is whitespace-only', async () => {
     const item = await prisma.debtItem.create({
       data: { title: 'Understand event loop', priority: 'P2', status: 'IN_PROGRESS' },
     })
@@ -777,7 +838,7 @@ describe('US-013: Write a self-explanation to resolve an item', () => {
       body: JSON.stringify({ resolution: '   \n\t  ' }),
     })
     const res = await resolve(req, { params: { id: item.id } })
-    expect(res.status).toBe(400)
+    expect(res.status).toBe(422)
   })
 
   it('does not change status when resolution is empty (force-submit attempt)', async () => {
@@ -796,7 +857,7 @@ describe('US-013: Write a self-explanation to resolve an item', () => {
     expect(unchanged?.status).toBe('IN_PROGRESS')
   })
 
-  it('returns 400 when resolution field is missing', async () => {
+  it('returns 422 when resolution field is missing', async () => {
     const item = await prisma.debtItem.create({
       data: { title: 'Understand event loop', priority: 'P2', status: 'IN_PROGRESS' },
     })
@@ -807,7 +868,43 @@ describe('US-013: Write a self-explanation to resolve an item', () => {
       body: JSON.stringify({}),
     })
     const res = await resolve(req, { params: { id: item.id } })
-    expect(res.status).toBe(400)
+    expect(res.status).toBe(422)
+  })
+
+  it('resolves an OPEN item directly without requiring IN_PROGRESS first', async () => {
+    const item = await prisma.debtItem.create({
+      data: { title: 'Understand closures', priority: 'P2', status: 'OPEN' },
+    })
+
+    const req = new Request(`http://localhost/api/items/${item.id}/resolve`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ resolution: 'A closure captures its enclosing scope by reference' }),
+    })
+    const res = await resolve(req, { params: { id: item.id } })
+    expect(res.status).toBe(200)
+    const body = await res.json()
+    expect(body.status).toBe('RESOLVED')
+  })
+
+  it('returns 422 when attempting to resolve an already-RESOLVED item', async () => {
+    const item = await prisma.debtItem.create({
+      data: {
+        title: 'Understand closures',
+        priority: 'P2',
+        status: 'RESOLVED',
+        resolution: 'A closure captures its enclosing scope by reference',
+        resolvedAt: new Date(),
+      },
+    })
+
+    const req = new Request(`http://localhost/api/items/${item.id}/resolve`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ resolution: 'Trying to resolve again' }),
+    })
+    const res = await resolve(req, { params: { id: item.id } })
+    expect(res.status).toBe(422)
   })
 })
 
@@ -855,5 +952,42 @@ describe('US-014: View a resolution explanation after closing an item', () => {
     const body = await res.json()
     expect(body.resolvedAt).toBeDefined()
     expect(new Date(body.resolvedAt).toISOString()).toBe(resolvedAt.toISOString())
+  })
+})
+
+// ---------------------------------------------------------------------------
+// GET /api/items/:id — not found
+// ---------------------------------------------------------------------------
+
+describe('GET /api/items/:id — not found', () => {
+  it('returns 404 for a non-existent item id', async () => {
+    const req = new Request('http://localhost/api/items/nonexistent-id')
+    const res = await getById(req, { params: { id: 'nonexistent-id' } })
+    expect(res.status).toBe(404)
+  })
+})
+
+// ---------------------------------------------------------------------------
+// DELETE /api/items/:id
+// ---------------------------------------------------------------------------
+
+describe('DELETE /api/items/:id', () => {
+  it('DELETE returns 200 and removes the item from the database', async () => {
+    const item = await prisma.debtItem.create({
+      data: { title: 'Item to delete', priority: 'P2', status: 'OPEN' },
+    })
+
+    const req = new Request(`http://localhost/api/items/${item.id}`, { method: 'DELETE' })
+    const res = await DELETE(req, { params: { id: item.id } })
+    expect(res.status).toBe(200)
+
+    const deleted = await prisma.debtItem.findUnique({ where: { id: item.id } })
+    expect(deleted).toBeNull()
+  })
+
+  it('DELETE returns 404 for a non-existent item', async () => {
+    const req = new Request('http://localhost/api/items/nonexistent-id', { method: 'DELETE' })
+    const res = await DELETE(req, { params: { id: 'nonexistent-id' } })
+    expect(res.status).toBe(404)
   })
 })

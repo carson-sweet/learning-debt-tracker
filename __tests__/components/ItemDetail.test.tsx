@@ -219,6 +219,28 @@ describe('US-012: ItemDetail — resource link field', () => {
     expect(link).toHaveAttribute('href', 'https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API')
   })
 
+  it('resource link opens in a new tab (target="_blank")', () => {
+    const item = makeItem({
+      status: 'IN_PROGRESS',
+      resourceLink: 'https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API',
+    })
+    render(<ItemDetail item={item} onUpdate={() => {}} onClose={() => {}} />)
+    const link = screen.getByRole('link')
+    expect(link).toHaveAttribute('target', '_blank')
+  })
+
+  it('resource link has rel="noopener noreferrer" for security', () => {
+    const item = makeItem({
+      status: 'IN_PROGRESS',
+      resourceLink: 'https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API',
+    })
+    render(<ItemDetail item={item} onUpdate={() => {}} onClose={() => {}} />)
+    const link = screen.getByRole('link')
+    const rel = link.getAttribute('rel') ?? ''
+    expect(rel).toContain('noopener')
+    expect(rel).toContain('noreferrer')
+  })
+
   it('shows a validation error for invalid URL input (bare domain)', async () => {
     const user = userEvent.setup()
     render(<ItemDetail item={makeItem({ status: 'IN_PROGRESS' })} onUpdate={() => {}} onClose={() => {}} />)
@@ -377,6 +399,47 @@ describe('US-013 + US-015: ItemDetail — resolve flow', () => {
 
     await waitFor(() => {
       expect(onUpdate).toHaveBeenCalledWith(expect.objectContaining({ status: 'RESOLVED' }))
+    })
+  })
+
+  it('disables the submit button while a resolve request is in flight', async () => {
+    const user = userEvent.setup()
+    let resolveRequest!: (value: Response) => void
+    vi.spyOn(global, 'fetch').mockImplementationOnce(
+      () => new Promise<Response>((res) => { resolveRequest = res })
+    )
+
+    render(<ItemDetail item={makeItem({ status: 'IN_PROGRESS' })} onUpdate={() => {}} onClose={() => {}} />)
+    await user.click(screen.getByRole('button', { name: /resolve/i }))
+    const textarea = screen.getByPlaceholderText(/what do you understand now/i)
+    await user.type(textarea, 'Some explanation')
+    await user.click(screen.getByRole('button', { name: /submit.resolution/i }))
+
+    const submitBtn = screen.getByRole('button', { name: /submit.resolution/i })
+    expect(submitBtn).toBeDisabled()
+
+    resolveRequest(
+      new Response(
+        JSON.stringify({ ...makeItem(), status: 'RESOLVED', resolution: 'Some explanation', resolvedAt: new Date().toISOString() }),
+        { status: 200 }
+      )
+    )
+  })
+
+  it('shows an error message when the resolve API call fails', async () => {
+    const user = userEvent.setup()
+    vi.spyOn(global, 'fetch').mockResolvedValueOnce(
+      new Response(JSON.stringify({ error: 'Server error' }), { status: 500 })
+    )
+
+    render(<ItemDetail item={makeItem({ status: 'IN_PROGRESS' })} onUpdate={() => {}} onClose={() => {}} />)
+    await user.click(screen.getByRole('button', { name: /resolve/i }))
+    const textarea = screen.getByPlaceholderText(/what do you understand now/i)
+    await user.type(textarea, 'Some explanation')
+    await user.click(screen.getByRole('button', { name: /submit.resolution/i }))
+
+    await waitFor(() => {
+      expect(screen.getByRole('alert') || screen.getByText(/error|failed|could not/i)).toBeInTheDocument()
     })
   })
 })

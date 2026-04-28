@@ -320,4 +320,32 @@ describe('US-011: BacklogList — inline mark in-progress action', () => {
       expect(onStatusChange).toHaveBeenCalledWith('ws-1', 'IN_PROGRESS')
     })
   })
+
+  it('does not show the Mark In Progress button for IN_PROGRESS items', () => {
+    const items = [makeItem({ title: 'Already started', status: 'IN_PROGRESS' })]
+    render(<BacklogList items={items} onStatusChange={() => {}} onPriorityChange={() => {}} />)
+    expect(screen.queryByRole('button', { name: /mark.*in.progress|start/i })).not.toBeInTheDocument()
+  })
+
+  it('does not show the Mark In Progress button for RESOLVED items', () => {
+    const items = [makeItem({ title: 'Done item', status: 'RESOLVED' })]
+    render(<BacklogList items={items} filter="ALL" onStatusChange={() => {}} onPriorityChange={() => {}} />)
+    expect(screen.queryByRole('button', { name: /mark.*in.progress|start/i })).not.toBeInTheDocument()
+  })
+})
+
+// ---------------------------------------------------------------------------
+// Empty states
+// ---------------------------------------------------------------------------
+
+describe('BacklogList — empty states', () => {
+  it('shows an empty state message when no items are passed', () => {
+    render(<BacklogList items={[]} onStatusChange={() => {}} onPriorityChange={() => {}} />)
+    expect(screen.getByText(/no items|empty|all clear|nothing/i)).toBeInTheDocument()
+  })
+
+  it('shows a contextual empty state when filter is RESOLVED and no resolved items exist', () => {
+    render(<BacklogList items={[]} filter="RESOLVED" onStatusChange={() => {}} onPriorityChange={() => {}} />)
+    expect(screen.getByText(/no resolved|nothing resolved|cleared|no items/i)).toBeInTheDocument()
+  })
 })
