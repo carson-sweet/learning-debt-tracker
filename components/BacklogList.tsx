@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import type { DebtItem } from '@/types'
 
 interface Props {
@@ -44,6 +44,12 @@ function statusBadgeContent(item: DebtItem): string {
 
 export function BacklogList({ items, filter, onStatusChange, onPriorityChange }: Props) {
   const [activeFilter, setActiveFilter] = useState(filter ?? 'ALL')
+
+  useEffect(() => {
+    if (activeFilter !== 'ALL' && !items.some((i) => i.status === activeFilter)) {
+      setActiveFilter('ALL')
+    }
+  }, [items, activeFilter])
 
   const hasOpen = items.some((i) => i.status === 'OPEN')
   const hasInProgress = items.some((i) => i.status === 'IN_PROGRESS')

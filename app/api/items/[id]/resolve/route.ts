@@ -23,6 +23,9 @@ export async function POST(req: Request, { params }: Ctx) {
   if (!resolution || typeof resolution !== 'string' || resolution.trim().length === 0) {
     return NextResponse.json({ error: 'Resolution is required and cannot be empty' }, { status: 422 })
   }
+  if (resolution.length > 10000) {
+    return NextResponse.json({ error: 'Resolution too long (max 10000 characters)' }, { status: 422 })
+  }
 
   const item = await prisma.debtItem.update({
     where: { id: params.id },

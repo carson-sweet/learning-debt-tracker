@@ -44,6 +44,9 @@ export async function POST(req: Request) {
   if (title.length > 300) {
     return NextResponse.json({ error: 'Title too long (max 300 characters)' }, { status: 422 })
   }
+  if (!['P1', 'P2', 'P3'].includes(priority)) {
+    return NextResponse.json({ error: 'Invalid priority value' }, { status: 422 })
+  }
   if (source && source.length > 500) {
     return NextResponse.json({ error: 'Source too long (max 500 characters)' }, { status: 422 })
   }

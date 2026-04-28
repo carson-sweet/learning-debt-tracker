@@ -31,9 +31,18 @@ export async function PATCH(req: Request, { params }: Ctx) {
   if (status !== undefined && !['OPEN', 'IN_PROGRESS'].includes(status)) {
     return NextResponse.json({ error: 'Invalid status value' }, { status: 422 })
   }
+  if (priority !== undefined && !['P1', 'P2', 'P3'].includes(priority)) {
+    return NextResponse.json({ error: 'Invalid priority value' }, { status: 422 })
+  }
+  if (notes !== undefined && notes.length > 10000) {
+    return NextResponse.json({ error: 'Notes too long (max 10000 characters)' }, { status: 422 })
+  }
   if (resourceLink !== undefined && resourceLink !== null && resourceLink !== '') {
     if (!resourceLink.startsWith('http://') && !resourceLink.startsWith('https://')) {
       return NextResponse.json({ error: 'Resource link must start with http:// or https://' }, { status: 422 })
+    }
+    if (resourceLink.length > 2048) {
+      return NextResponse.json({ error: 'Resource link too long (max 2048 characters)' }, { status: 422 })
     }
   }
 

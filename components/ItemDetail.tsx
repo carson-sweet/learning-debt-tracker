@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import type { DebtItem } from '@/types'
 
 interface Props {
@@ -21,6 +21,11 @@ export function ItemDetail({ item, onUpdate, onClose }: Props) {
   const [resolution, setResolution] = useState('')
   const [resolveLoading, setResolveLoading] = useState(false)
   const [resolveError, setResolveError] = useState<string | null>(null)
+
+  useEffect(() => {
+    setNotes(item.notes ?? '')
+    setResourceLink(item.resourceLink ?? '')
+  }, [item.id])
 
   const patch = async (data: Record<string, unknown>): Promise<DebtItem | null> => {
     const res = await fetch(`/api/items/${item.id}`, {
