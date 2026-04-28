@@ -1,0 +1,14 @@
+project_type: hobby
+intent: Local web app for tracking learning debt — concepts handled via AI but not fully understood
+problem_summary: ""
+target_user_summary: Developers, students, and knowledge workers who use AI tools daily and get unblocked without understanding why
+depth_run: L1
+not_scope:
+  - AI-generated explanations or learning content
+  - Social features, sharing, or collaboration
+  - Spaced repetition scheduling
+  - External integrations (Notion, Jira, Obsidian, etc.)
+  - Mobile app
+  - User accounts or authentication
+pain_thesis_present: false
+validation_rubric_run: false

@@ -1,0 +1,11 @@
+schema_version: 1
+collected_at: 2026-04-28T00:00:00Z
+data_categories: []
+user_geography:
+  - us
+geography_notes: null
+user_type:
+  - b2c
+derived_frameworks:
+  - gdpr_floor
+notes: Single-user local app. No PII, financial, health, or tracked behavioral data. gdpr_floor applied as baseline.
