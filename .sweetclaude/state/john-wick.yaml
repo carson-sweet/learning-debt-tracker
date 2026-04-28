@@ -1,12 +1,12 @@
 schema_version: 1
-status: active
+status: waiting_for_user
 feature_name: learning-debt-tracker-v1
 feature_branch: learning-debt-tracker-v1
 github_mode: false
 phase_checkins: true
 
 current_phase: DEFINE
-current_step: D2
+current_step: D4
 
 discovery_artifacts:
   personas: docs/learning-debt-tracker-user-personas-draft-v1.0-20260428.md
@@ -23,13 +23,17 @@ created_artifacts:
 
 issue_list: []
 
-caucus_outputs: []
+caucus_outputs:
+  - step: D2
+    path: .sweetclaude/caucus/prd-review-20260428.md
+  - step: D3
+    path: .sweetclaude/caucus/prd-review-20260428-changes.md
 
 checkin_outputs: []
 
 interactive_gate_pending:
-  step: null
-  description: null
+  step: D4
+  description: PRD approval — review contested findings and open questions
 
 locked_test_files: []
 
@@ -41,4 +45,4 @@ context_checkpoint:
 sessions:
   - started: 2026-04-28T00:00:00Z
     ended: null
-    steps_completed: [B1, B2, B3, B4, D1]
+    steps_completed: [B1, B2, B3, B4, D1, D2, D3]

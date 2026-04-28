@@ -12,9 +12,9 @@ generated: autonomous
 
 ## 1. Executive Summary
 
-[1] Learning Debt Tracker is a local, single-user web application that helps AI-assisted developers and knowledge workers track concepts they've been unblocked on but haven't fully understood. It captures "learning debt" items in under 10 seconds, maintains a priority-ordered backlog, and requires a self-written explanation to close each item.
+[1] Learning Debt Tracker interrupts the escape hatch that AI tools create — the ability to get unblocked without understanding — by installing a structured closure ritual at the moment of resolution. You cannot close an item without explaining, in your own words, what you now understand. The product's value is not the capture flow or the backlog; it is the enforcement of a ritual that open-ended tools cannot enforce by design.
 
-[2] The app runs entirely locally — no accounts, no cloud, no network. Built with Next.js and SQLite via Prisma. The design philosophy is deliberate: the app is a tracking tool, not a tutor. It intentionally does not generate AI explanations, because doing so would replicate the exact behavior it exists to counteract.
+[2] The app runs entirely locally — no accounts, no cloud, no network. Built with Next.js and SQLite via Prisma. It is intentionally not a tutor and does not generate AI explanations, because doing so would replicate the exact behavior it exists to counteract.
 
 ---
 
@@ -27,6 +27,8 @@ generated: autonomous
 [5] **Concrete scenario:** Alex is a junior developer who uses Copilot and Claude daily. Over six months they shipped features involving JWT auth, React performance optimization, database indexing, and async JavaScript. For each, an AI tool provided the answer. Alex understood it enough to apply it. But asked to explain JWT expiry vs. revocation, or why `useCallback` does not always prevent rerenders, Alex would struggle. No record of these gaps, no system for closing them, no visibility into how many there are.
 
 [6] A second scenario: a voracious reader encounters an unfamiliar concept mid-article. They either interrupt their reading flow to look it up (losing context) or keep reading and forget it entirely. There is no lightweight system for parking the concept and coming back to it with intention.
+
+[6a] Existing tools do not solve this problem by design. Anki requires constructing a flashcard — wrong moment, wrong cognitive mode. Obsidian and Notion accept the item but impose no closure ceremony — the checkbox is sufficient and the learning is optional. GitHub TIL repos accept prose but have no backlog, no priority, and no closure gate. The product fills this gap not by adding features these tools lack, but by enforcing a constraint they deliberately omit.
 
 ---
 
@@ -153,6 +155,7 @@ generated: autonomous
 - User accounts or authentication of any kind
 - Cloud sync or remote data storage
 - Multi-user support
+- Instant global access — keyboard shortcut integration, browser extension, or CLI capture tool are all deferred. The app assumes it is already open in a browser tab. This is a known limitation of the browser tab form factor in v1.
 
 ---
 
@@ -168,6 +171,7 @@ generated: autonomous
 - Stack is fixed: Next.js 14+ (App Router), TypeScript, SQLite via Prisma
 - No deployment infrastructure — the app is never pushed to a server
 - No external API keys, cloud credentials, or third-party accounts required
+- **The app is expected to be open in a persistent browser tab while the user is working. The 10-second capture constraint (G1, FR-004) assumes the tab is already loaded and hydrated. The constraint does not account for switching contexts, opening a browser, or navigating to localhost.**
 
 ---
 
