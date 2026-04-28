@@ -44,7 +44,10 @@ export default function Home() {
   }, [loadMetrics])
 
   return (
-    <div>
+    <div className="max-w-3xl mx-auto px-4 py-8">
+      <div className="flex items-center justify-between mb-8">
+        <h1 className="text-lg font-semibold text-zinc-50 tracking-tight">Learning Debt</h1>
+      </div>
       {metrics && <Dashboard metrics={metrics} />}
       <CaptureForm onSuccess={reload} />
       {selectedItem ? (

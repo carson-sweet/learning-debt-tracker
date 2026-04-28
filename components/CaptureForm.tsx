@@ -63,10 +63,10 @@ export function CaptureForm({ onSuccess }: Props) {
   }
 
   return (
-    <form onSubmit={handleSubmit} noValidate>
-      {error && <div role="alert">{error}</div>}
-      <div>
-        <label htmlFor="capture-title">Title</label>
+    <form onSubmit={handleSubmit} noValidate className="bg-zinc-900 border border-zinc-800 rounded-lg p-5 mb-6">
+      {error && <div role="alert" className="text-red-400 text-sm mb-3">{error}</div>}
+      <div className="mb-3">
+        <label htmlFor="capture-title" className="sr-only">Title</label>
         <input
           id="capture-title"
           ref={titleRef}
@@ -76,38 +76,54 @@ export function CaptureForm({ onSuccess }: Props) {
           onChange={(e) => setTitle(e.target.value)}
           onKeyDown={handleKeyDown}
           autoFocus
+          placeholder="What do you need to understand?"
+          className="w-full bg-zinc-950 border border-zinc-700 rounded-md px-3 py-2 text-zinc-50 placeholder-zinc-600 focus:outline-none focus:ring-2 focus:ring-violet-600 focus:border-transparent"
         />
       </div>
-      <div>
-        <label htmlFor="capture-source">Source or context</label>
-        <input
-          id="capture-source"
-          aria-label="Source or context"
-          type="text"
-          value={source}
-          onChange={(e) => setSource(e.target.value)}
-          maxLength={500}
-        />
+      <div className="flex gap-2 items-center">
+        <div className="flex-1">
+          <label htmlFor="capture-source" className="sr-only">Source or context</label>
+          <input
+            id="capture-source"
+            aria-label="Source or context"
+            type="text"
+            value={source}
+            onChange={(e) => setSource(e.target.value)}
+            maxLength={500}
+            placeholder="Source or context"
+            className="w-full bg-zinc-950 border border-zinc-700 rounded-md px-3 py-2 text-sm text-zinc-50 placeholder-zinc-600 focus:outline-none focus:ring-2 focus:ring-violet-600 focus:border-transparent"
+          />
+        </div>
+        <fieldset className="border-0 p-0 m-0">
+          <legend className="sr-only">Priority</legend>
+          <div className="flex rounded-md overflow-hidden border border-zinc-700">
+            {(['P1', 'P2', 'P3'] as const).map((p, i) => (
+              <label
+                key={p}
+                className={`relative cursor-pointer px-3 py-2 text-sm font-medium transition-colors ${i > 0 ? 'border-l border-zinc-700' : ''} ${priority === p ? 'bg-violet-600 text-white' : 'bg-zinc-800 text-zinc-400 hover:text-zinc-200'}`}
+              >
+                <input
+                  type="radio"
+                  name="priority"
+                  value={p}
+                  aria-label={p}
+                  checked={priority === p}
+                  onChange={() => setPriority(p)}
+                  className="sr-only"
+                />
+                {p}
+              </label>
+            ))}
+          </div>
+        </fieldset>
+        <button
+          type="submit"
+          disabled={loading}
+          className="bg-violet-600 hover:bg-violet-500 text-white font-medium px-4 py-2 rounded-md disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        >
+          Add
+        </button>
       </div>
-      <fieldset>
-        <legend>Priority</legend>
-        {(['P1', 'P2', 'P3'] as const).map((p) => (
-          <label key={p}>
-            <input
-              type="radio"
-              name="priority"
-              value={p}
-              aria-label={p}
-              checked={priority === p}
-              onChange={() => setPriority(p)}
-            />
-            {p}
-          </label>
-        ))}
-      </fieldset>
-      <button type="submit" disabled={loading}>
-        Add
-      </button>
     </form>
   )
 }
