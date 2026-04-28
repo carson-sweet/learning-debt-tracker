@@ -1,12 +1,12 @@
 schema_version: 1
-status: active
+status: complete
 feature_name: learning-debt-tracker-v1
 feature_branch: learning-debt-tracker-v1
 github_mode: false
 phase_checkins: true
 
-current_phase: VERIFY
-current_step: V5
+current_phase: SHIP
+current_step: done
 
 discovery_artifacts:
   personas: docs/learning-debt-tracker-user-personas-draft-v1.0-20260428.md
@@ -157,4 +157,4 @@ context_checkpoint:
 sessions:
   - started: 2026-04-28T00:00:00Z
     ended: null
-    steps_completed: [B1, B2, B3, B4, D1, D2, D3, D4, CK1, P1, P2, P3, P4, CK2, DS1, DS2, DS3, DS4, DS5, DS6, DS7, CK3, IP1, IP2, IP3, IP4, IP5, IP6, IM1, IM2-ISS-001, V1, V2, V3, V4]
+    steps_completed: [B1, B2, B3, B4, D1, D2, D3, D4, CK1, P1, P2, P3, P4, CK2, DS1, DS2, DS3, DS4, DS5, DS6, DS7, CK3, IP1, IP2, IP3, IP4, IP5, IP6, IM1, IM2-ISS-001, V1, V2, V3, V4, V5]
