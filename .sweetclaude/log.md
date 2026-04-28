@@ -33,3 +33,18 @@
 - Closest analogs: Anki (SRS, no prose closure) and GitHub TIL repos (prose, no backlog/closure workflow)
 - AI-learning-gap framing gaining traction but no dedicated product exists
 **Open questions:** none
+
+## 2026-04-28T00:00:00Z — product-prd (autonomous)
+
+**Status:** completed
+**Produced:** docs/learning-debt-tracker-v1-prd-draft-v1.0-20260428.md, .sweetclaude/state/prd.yaml
+**Key decisions:**
+- 5 epics: Capture, Backlog, Triage & Work, Resolution, Dashboard
+- 19 functional requirements, 7 NFRs
+- gdpr_floor compliance NFR included (data minimization)
+- Priority defaults to P2 at capture (reduces friction)
+**Open questions:**
+- Priority default at capture: P2 proposed — confirm at D4
+- Minimum resolution text length: any non-empty proposed — confirm at D4
+- In-progress item visual treatment in backlog
+- Dashboard "this week/month" definition: rolling vs calendar-aligned
