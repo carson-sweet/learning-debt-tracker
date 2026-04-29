@@ -1,7 +1,7 @@
 ---
 title: Learning Debt Tracker v1 — Architecture Document
 version: 1.0
-status: draft
+status: approved
 author: Carson Sweet
 assisted_by: Claude Code + SweetClaude (John Wick mode)
 date: 2026-04-28
