@@ -13,7 +13,7 @@ is wrong.
 **I-001:** A Resolved item can never transition to Open or In Progress.
 - Once `status = RESOLVED`, the only valid PATCH operations are to `notes` and
   `resourceLink`. Any attempt to change `status` away from RESOLVED must return
-  `400 Bad Request`.
+  `422 Unprocessable Entity`.
 - *Source: ADR-006, FR-013*
 
 **I-002:** An item can be resolved directly from Open without passing through
@@ -23,10 +23,10 @@ In Progress.
 - *Source: CK2 finding — Gherkin originally missed this; corrected before
   implementation.*
 
-**I-003:** Resolution requires a non-empty `resolutionText`.
-- `POST /api/items/:id/resolve` must reject any request where `resolutionText`
+**I-003:** Resolution requires a non-empty `resolution` field.
+- `POST /api/items/:id/resolve` must reject any request where `resolution`
   is absent, null, or empty string with `422 Unprocessable Entity`.
-- *Source: FR-013, FR-015*
+- *Source: FR-013*
 
 ---
 
@@ -40,8 +40,8 @@ In Progress.
 **I-005:** An item's `id` is immutable.
 - Item IDs are assigned by the database and never reassigned or reused.
 
-**I-006:** `resolutionText` is null on non-Resolved items.
-- The `resolutionText` field must be `null` when `status` is `OPEN` or
+**I-006:** `resolution` is null on non-Resolved items.
+- The `resolution` field must be `null` when `status` is `OPEN` or
   `IN_PROGRESS`. It may only be non-null when `status = RESOLVED`.
 - *Source: FR-014*
 
@@ -67,7 +67,8 @@ tier, oldest `createdAt` first.
 
 **I-009:** Prisma is never imported in client-side code.
 - Any file with `"use client"` at the top must not import from `lib/prisma.ts`
-  or `@prisma/client` directly. TypeScript module boundaries enforce this.
+  or `@prisma/client` directly. The Next.js bundler enforces this at build time
+  by erroring when server-only Node.js internals are pulled into the client bundle.
 - *Source: NFR-007, ADR-004*
 
 **I-010:** No network requests are made to external services at runtime.
