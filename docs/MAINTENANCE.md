@@ -64,12 +64,16 @@ All database mutations go through Route Handlers in `app/api/`. Client component
 these via `fetch()`. This is enforced by TypeScript import discipline — if you import
 Prisma in a client component, the build will fail or produce a runtime error.
 
-**The one exception (documented in ADR-007):**
+**The permitted exception (documented in ADR-007):**
 
-Page-level Server Components (`app/page.tsx`, `app/backlog/page.tsx`,
-`app/backlog/[id]/page.tsx`) may read Prisma directly for their initial SSR render.
-They run exclusively on the server; Prisma never reaches the browser. Subsequent reads
-and all writes go through Route Handlers.
+If a page is implemented as a Server Component (no `'use client'` directive), it may
+read Prisma directly for its initial SSR render. Server Components run exclusively on
+the server; Prisma never reaches the browser. Subsequent reads and all writes still go
+through Route Handlers.
+
+Current v1 pages are all client components that fetch via Route Handlers — the Server
+Component pattern is permitted but not yet used. If you add a Server Component page,
+this is the approved pattern for its initial data load.
 
 See `docs/adr/ADR-007-server-component-prisma-reads-20260429.md` for the full rationale.
 
@@ -111,9 +115,9 @@ See `docs/adr/ADR-007-server-component-prisma-reads-20260429.md` for the full ra
 
 ### Add a new page or route
 
-1. Add the page under `app/` as a Server Component
-2. If it needs data: read from Prisma directly in the Server Component for initial SSR render (see ADR-007)
-3. Add a Route Handler in `app/api/` for any client-side interactions
+1. Add the page under `app/`. Current pages are client components (`'use client'`) that fetch via Route Handlers — follow that pattern for consistency.
+2. Add a Route Handler in `app/api/` for data fetching
+3. If you add the page as a Server Component instead: it may read Prisma directly for its initial SSR render (see ADR-007), but all subsequent reads and writes still go through Route Handlers
 4. Add the route to the architecture doc's component table
 5. Add tests in `__tests__/api/` for the Route Handler
 
