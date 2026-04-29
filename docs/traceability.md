@@ -26,7 +26,7 @@ to find every artifact that will need updating.
 | FR-012 | Add resource link to In Progress item | US-012 | `us-012-add-resource-link.feature` | `api/items.test.ts`, `components/ItemDetail.test.tsx` |
 | FR-013 | Require non-empty explanation to resolve | US-013, US-015 | `us-013-write-self-explanation-to-resolve.feature`, `us-015-cannot-resolve-without-explanation.feature` | `api/items.test.ts`, `components/ItemDetail.test.tsx` |
 | FR-014 | Store and display resolution after close | US-014 | `us-014-view-resolution-after-closing.feature` | `api/items.test.ts`, `components/ItemDetail.test.tsx` |
-| FR-015 | No AI integration — free-text only | US-013, US-015 | `us-015-cannot-resolve-without-explanation.feature` | `api/items.test.ts` |
+| FR-015 | No AI integration — free-text only | — | (architectural constraint; no AI surfaces exist in the UI or API) | `api/items.test.ts` |
 | FR-016 | Dashboard: open count, weekly/monthly resolved, oldest open | US-016 | `us-016-dashboard-summary.feature` | `api/dashboard.test.ts`, `components/Dashboard.test.tsx` |
 | FR-017 | Persist all data to local SQLite via Prisma | — | (infrastructure; covered by all API tests) | `api/items.test.ts`, `api/dashboard.test.ts` |
 | FR-018 | Data survives browser refresh and app restart | — | (infrastructure; covered by API tests using real DB) | `api/items.test.ts` |
