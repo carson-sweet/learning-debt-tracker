@@ -104,7 +104,9 @@ See `docs/adr/ADR-007-server-component-prisma-reads-20260429.md` for the full ra
 1. Identify which FR the bug relates to — check `docs/traceability.md`
 2. Find the Gherkin scenario(s) for that FR
 3. Find the test file(s) for those scenarios
-4. Run the failing test in isolation: `npm test -- --reporter=verbose <test-file>`
+4. Run the failing test in isolation:
+   - Vitest tests (all except e2e): `npm test -- <test-file>`
+   - E2e test (`offline.test.ts`): start dev server, then `npm run test:e2e`
 5. Trace from the test to the Route Handler to the Prisma query
 
 ### Add a new page or route
@@ -122,8 +124,9 @@ See `docs/adr/ADR-007-server-component-prisma-reads-20260429.md` for the full ra
 ```bash
 npm run dev        # Start dev server on localhost:3000
 npm run build      # Production build
-npm test           # Run full test suite (Vitest)
+npm test           # Run full test suite (Vitest — excludes e2e)
 npm test -- --reporter=verbose  # Verbose test output
+npm run test:e2e   # Run Playwright e2e tests (requires: npm run dev first)
 npx prisma studio  # Browse the database in a GUI
 npx prisma migrate dev --name <name>  # Apply a new migration
 ```
@@ -142,6 +145,6 @@ npx prisma migrate dev --name <name>  # Apply a new migration
 | `__tests__/components/BacklogList.test.tsx` | Backlog display, sorting, filtering |
 | `__tests__/components/ItemDetail.test.tsx` | Item detail view, edit, resolve |
 | `__tests__/components/Dashboard.test.tsx` | Dashboard component rendering |
-| `__tests__/e2e/offline.test.ts` | Confirms no network requests are made at runtime |
+| `__tests__/e2e/offline.test.ts` | Confirms no network requests are made at runtime (Playwright — run with `npm run test:e2e`, requires dev server) |
 
 Read `__tests__/INVARIANTS.md` before making changes — it lists what must never break.
