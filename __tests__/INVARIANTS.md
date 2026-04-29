@@ -14,7 +14,7 @@ is wrong.
 - Once `status = RESOLVED`, the only valid PATCH operations are to `notes` and
   `resourceLink`. Any attempt to change `status` away from RESOLVED must return
   `422 Unprocessable Entity`.
-- *Source: ADR-006, FR-013*
+- *Source: ADR-006*
 
 **I-002:** An item can be resolved directly from Open without passing through
 In Progress.
