@@ -90,8 +90,8 @@ export function CaptureForm({ onSuccess }: Props) {
             value={source}
             onChange={(e) => setSource(e.target.value)}
             maxLength={500}
-            placeholder="Source or context"
-            className="w-full bg-zinc-950 border border-zinc-700 rounded-md px-3 py-2 text-sm text-zinc-50 placeholder-zinc-600 focus:outline-none focus:ring-2 focus:ring-violet-600 focus:border-transparent"
+            placeholder="Source or context — optional"
+            className="w-full bg-transparent border-0 border-b border-zinc-800 px-1 py-1.5 text-xs text-zinc-400 placeholder-zinc-700 focus:outline-none focus:border-zinc-600 transition-colors"
           />
         </div>
         <fieldset className="border-0 p-0 m-0">
