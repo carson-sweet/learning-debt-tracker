@@ -1,4 +1,6 @@
-# Learning Debt Tracker
+# Learning Debt Tracker (SweetClaude demo)
+
+This app was created by SweetClaude in John Wick mode as a demonstration. Its purpose is to allow people to see how SweetClaude in John Wick mode operates.
 
 A local, single-user web app for tracking concepts you got unblocked on via AI but didn't fully understand. Capture learning debt fast, manage a priority-ordered backlog, and write a self-explanation to close each item.
 
